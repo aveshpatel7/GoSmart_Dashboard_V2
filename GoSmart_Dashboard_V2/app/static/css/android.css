@@ -1,0 +1,65 @@
+/* Go Smart Android-only refinements. Desktop browsers remain unchanged. */
+body:not(.is-android) .android-only{display:none!important}
+body.is-android{
+  -webkit-tap-highlight-color:transparent;
+  overscroll-behavior-y:none;
+  touch-action:manipulation;
+  padding-bottom:env(safe-area-inset-bottom,0);
+}
+body.is-android button,body.is-android select,body.is-android input,body.is-android textarea{font-size:16px}
+body.is-android button{min-height:46px}
+body.is-android .main{padding-bottom:calc(92px + env(safe-area-inset-bottom,0))}
+body.is-android .topbar{position:sticky;top:0;z-index:14;background:rgba(5,13,20,.88);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+body.is-android .top-actions .primary{min-width:46px;padding-inline:13px}
+body.is-android .card{border-radius:18px}
+body.is-android .toolbar{gap:9px;flex-wrap:wrap}
+body.is-android .toolbar>select,body.is-android .toolbar>input{min-height:48px}
+body.is-android .relay{min-height:88px;padding:16px}
+body.is-android .switch{width:62px;height:34px}
+body.is-android .switch:after{width:26px;height:26px;top:4px;left:4px}
+body.is-android .switch.on:after{left:32px}
+body.is-android .master{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+body.is-android .master button{min-height:52px;font-weight:800}
+body.is-android .fan-card{padding-bottom:22px}
+body.is-android .fan-orb{font-size:70px;min-height:118px;display:grid;place-items:center}
+body.is-android .speed-row{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+body.is-android .speed-row button{min-height:50px;padding:10px 4px;font-weight:800}
+body.is-android .progress-box{border-radius:14px;line-height:1.45}
+body.is-android .usb-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+body.is-android .usb-actions button{min-height:50px}
+body.is-android .serial-output{font-size:12px;min-height:290px;max-height:52vh}
+body.is-android .serial-toolbar,body.is-android .serial-send-row{gap:8px}
+body.is-android .serial-toolbar button,body.is-android .serial-send-row button{min-height:48px}
+body.is-android .android-bottom-nav{
+  display:grid!important;position:fixed;z-index:80;left:10px;right:10px;bottom:calc(9px + env(safe-area-inset-bottom,0));
+  grid-template-columns:repeat(5,1fr);gap:4px;padding:7px;border:1px solid rgba(122,166,182,.22);border-radius:20px;
+  background:rgba(7,16,24,.92);box-shadow:0 18px 45px rgba(0,0,0,.42);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)
+}
+body.is-android .android-bottom-nav button{border:0;background:transparent;color:#82949f;border-radius:14px;min-height:54px;padding:5px 3px;display:grid;place-items:center;gap:1px;font-size:18px}
+body.is-android .android-bottom-nav button span{display:block;font-size:9px;font-weight:700;letter-spacing:.2px}
+body.is-android .android-bottom-nav button.active{background:rgba(185,255,53,.12);color:#dfff9c}
+body.is-android .android-toast-stack{display:grid!important;position:fixed;z-index:120;left:12px;right:12px;bottom:calc(83px + env(safe-area-inset-bottom,0));gap:8px;pointer-events:none}
+body.is-android .android-toast{padding:12px 14px;border-radius:14px;background:rgba(11,25,34,.96);border:1px solid #23404d;color:#eaf2f7;box-shadow:0 14px 30px rgba(0,0,0,.35);font-size:13px;animation:androidToastIn .18s ease-out}
+body.is-android .android-toast.ok{border-color:rgba(185,255,53,.35)}
+body.is-android .android-toast.err{border-color:rgba(255,107,114,.45)}
+body.is-android .sidebar{padding-bottom:calc(20px + env(safe-area-inset-bottom,0))}
+@keyframes androidToastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media(max-width:700px){
+  body.is-android .main{padding-left:12px;padding-right:12px}
+  body.is-android .topbar{height:68px}
+  body.is-android .topbar h2{font-size:18px}
+  body.is-android .topbar p{display:none}
+  body.is-android .page{padding-top:16px}
+  body.is-android .hero{padding:20px;border-radius:18px}
+  body.is-android .hero p{font-size:13px}
+  body.is-android .stats{grid-template-columns:1fr 1fr;gap:10px}
+  body.is-android .stat{padding:15px}
+  body.is-android .stat b{font-size:24px}
+  body.is-android .grid.two,body.is-android .control-grid{grid-template-columns:1fr}
+  body.is-android .relay-grid{grid-template-columns:1fr}
+  body.is-android .table-wrap{border-radius:16px}
+  body.is-android .table-wrap table{min-width:760px}
+  body.is-android .usb-grid{grid-template-columns:1fr}
+  body.is-android .usb-actions{grid-template-columns:1fr}
+  body.is-android .serial-send-row{grid-template-columns:1fr}
+}

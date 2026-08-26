@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Go Smart Command Center</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}?v=20260827c">
 </head>
 <body>
 {% if not logged_in %}
@@ -73,7 +73,7 @@
       <div class="toolbar"><select id="controlNode"></select><button class="secondary" onclick="localStatePrompt()">Check Local /state</button></div>
       <div id="controlFeedback" class="control-feedback" aria-live="polite"></div>
       <div class="control-grid">
-        <article class="card"><div class="card-head"><h3>Relay channels</h3><span class="muted">Instant UI response</span></div><div class="relay-grid" id="relayGrid"></div><div class="master"><button id="allOnBtn" class="primary" onclick="command(6,null,'ON')">ALL ON</button><button id="allOffBtn" class="danger-btn" onclick="command(7,null,'OFF')">ALL OFF</button></div></article>
+        <article class="card"><div class="card-head"><h3>Relay channels</h3><span class="muted">Instant UI response</span></div><div class="relay-grid" id="relayGrid"></div><div class="master"><button id="allOnBtn" class="primary" onclick="masterCommand(true)">ALL ON</button><button id="allOffBtn" class="danger-btn" onclick="masterCommand(false)">ALL OFF</button></div></article>
         <article class="card fan-card"><h3>Fan</h3><div class="fan-orb" id="fanOrb">🌀</div><div id="fanState" class="big-state">OFF</div><div class="speed-row" id="speedRow"></div></article>
       </div>
     </section>
@@ -128,7 +128,8 @@
     </section>
   </main>
 </div>
-<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+<script src="{{ url_for('static', filename='js/app.js') }}?v=20260827c"></script>
+<script src="{{ url_for('static', filename='js/fixes.js') }}?v=20260827c"></script>
 {% endif %}
 </body>
 </html>

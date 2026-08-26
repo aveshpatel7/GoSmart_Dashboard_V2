@@ -18,7 +18,11 @@ FIRMWARE_DIR = BASE / "firmwarev2"
 DATA_DIR.mkdir(exist_ok=True)
 FIRMWARE_DIR.mkdir(exist_ok=True)
 
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    template_folder="app/templates",
+    static_folder="app/static",
+)
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "change-me-in-production")
 
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
@@ -107,8 +111,8 @@ def on_connect(client, userdata, flags, rc, properties=None):
     else:
         add_event("error", "", f"MQTT connection failed: {rc}")
 
-def on_disconnect(client, userdata, rc, properties=None):
-    add_event("mqtt", "", f"MQTT disconnected: {rc}")
+def on_disconnect(client, userdata, disconnect_flags, reason_code, properties=None):
+    add_event("mqtt", "", f"MQTT disconnected: {reason_code}")
 
 def on_message(client, userdata, msg):
     try:

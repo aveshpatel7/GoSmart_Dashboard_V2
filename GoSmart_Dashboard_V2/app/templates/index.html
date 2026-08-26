@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Go Smart Command Center</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}?v=20260827d">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}?v=20260827e">
 </head>
 <body>
 {% if not logged_in %}
@@ -106,30 +106,16 @@
       </div>
     </section>
 
-    <section class="page" id="page-diagnostics">
-      <div class="card"><div class="toolbar"><select id="diagNode"></select><button class="primary" onclick="renderDiagnostics()">Run dashboard diagnostics</button></div><div id="diagnosticPanel"></div></div>
-    </section>
-
-    <section class="page" id="page-analytics">
-      <div class="stats"><div class="stat"><span>Total toggles</span><b id="totalToggles">0</b></div><div class="stat"><span>Total runtime</span><b id="totalHours">0h</b></div><div class="stat"><span>Avg RSSI</span><b id="avgRssi">—</b></div><div class="stat"><span>Total crashes</span><b id="totalCrashes">0</b></div></div>
-      <div class="grid two"><article class="card"><h3>Channel runtime</h3><div id="runtimeBars"></div></article><article class="card"><h3>Device health distribution</h3><div id="healthBars"></div></article></div>
-    </section>
-
-    <section class="page" id="page-alerts">
-      <div class="card"><div class="card-head"><h3>Alert center</h3><span class="muted">Derived from existing telemetry/status</span></div><div id="alertsList"></div></div>
-    </section>
-
-    <section class="page" id="page-logs">
-      <div class="card"><div class="toolbar"><input id="logFilter" placeholder="Filter logs…" oninput="renderLogs()"></div><div id="allLogs" class="console"></div></div>
-    </section>
-
-    <section class="page" id="page-settings">
-      <div class="card"><h3>Dashboard device metadata</h3><p class="muted">Room, customer, warranty and notes live in the dashboard backend; they do not alter ESP32 firmware.</p><select id="metaNode" onchange="loadMetaForm()"></select><div class="form-grid"><input id="metaRoom" placeholder="Room"><input id="metaCustomer" placeholder="Customer"><input id="metaWarranty" type="date"><textarea id="metaNotes" placeholder="Notes"></textarea></div><button class="primary" onclick="saveMeta()">Save metadata</button></div>
-    </section>
+    <section class="page" id="page-diagnostics"><div class="card"><div class="toolbar"><select id="diagNode"></select><button class="primary" onclick="renderDiagnostics()">Run dashboard diagnostics</button></div><div id="diagnosticPanel"></div></div></section>
+    <section class="page" id="page-analytics"><div class="stats"><div class="stat"><span>Total toggles</span><b id="totalToggles">0</b></div><div class="stat"><span>Total runtime</span><b id="totalHours">0h</b></div><div class="stat"><span>Avg RSSI</span><b id="avgRssi">—</b></div><div class="stat"><span>Total crashes</span><b id="totalCrashes">0</b></div></div><div class="grid two"><article class="card"><h3>Channel runtime</h3><div id="runtimeBars"></div></article><article class="card"><h3>Device health distribution</h3><div id="healthBars"></div></article></div></section>
+    <section class="page" id="page-alerts"><div class="card"><div class="card-head"><h3>Alert center</h3><span class="muted">Derived from existing telemetry/status</span></div><div id="alertsList"></div></div></section>
+    <section class="page" id="page-logs"><div class="card"><div class="toolbar"><input id="logFilter" placeholder="Filter logs…" oninput="renderLogs()"></div><div id="allLogs" class="console"></div></div></section>
+    <section class="page" id="page-settings"><div class="card"><h3>Dashboard device metadata</h3><p class="muted">Room, customer, warranty and notes live in the dashboard backend; they do not alter ESP32 firmware.</p><select id="metaNode" onchange="loadMetaForm()"></select><div class="form-grid"><input id="metaRoom" placeholder="Room"><input id="metaCustomer" placeholder="Customer"><input id="metaWarranty" type="date"><textarea id="metaNotes" placeholder="Notes"></textarea></div><button class="primary" onclick="saveMeta()">Save metadata</button></div></section>
   </main>
 </div>
-<script src="{{ url_for('static', filename='js/app.js') }}?v=20260827d"></script>
-<script src="{{ url_for('static', filename='js/fixes.js') }}?v=20260827d"></script>
+<script src="{{ url_for('static', filename='js/app.js') }}?v=20260827e"></script>
+<script src="{{ url_for('static', filename='js/fixes.js') }}?v=20260827e"></script>
+<script src="{{ url_for('static', filename='js/usb_bundle_fix.js') }}?v=20260827e"></script>
 {% endif %}
 </body>
 </html>

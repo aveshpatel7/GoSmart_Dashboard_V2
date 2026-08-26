@@ -1,0 +1,100 @@
+/* USB flasher loader fix: use esptool-js single bundle so browser never sees bare 'pako' imports. */
+(function(){
+  const $=id=>document.getElementById(id);
+  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+  let toolModule=null, serialApi=null, transport=null, loader=null, flashPort=null, connecting=false;
+
+  function usbLog(msg){const el=$('usbStatus');if(el)el.textContent=String(msg);console.log('[GoSmart USB v2]',msg)}
+  function terminal(){return{clean(){},writeLine(d){if(String(d).trim())usbLog(String(d).trim())},write(d){if(String(d).trim())usbLog(String(d).trim())}}}
+
+  async function getSerialApi(){
+    if(serialApi)return serialApi;
+    if(!window.isSecureContext)throw new Error('USB Flash needs HTTPS.');
+    if(navigator.serial&&typeof navigator.serial.requestPort==='function'){serialApi=navigator.serial;return serialApi;}
+    if(navigator.usb&&typeof navigator.usb.requestDevice==='function'){
+      usbLog('Android/WebUSB detected. Loading serial compatibility…');
+      let poly=null,last=null;
+      for(const url of ['https://cdn.jsdelivr.net/npm/web-serial-polyfill@1.0.15/dist/serial.js','https://unpkg.com/web-serial-polyfill@1.0.15/dist/serial.js']){
+        try{poly=await import(url);break}catch(e){last=e}
+      }
+      if(!poly)throw new Error(`Android USB serial support could not load. ${last?.message||''}`);
+      serialApi=poly.serial||poly.default?.serial||poly.default;
+      if(!serialApi||typeof serialApi.requestPort!=='function')throw new Error('Android USB serial compatibility layer failed to start.');
+      return serialApi;
+    }
+    throw new Error('USB serial is unavailable. Open the dashboard directly in Chrome/Edge.');
+  }
+
+  async function loadBundledEsptool(){
+    if(toolModule)return toolModule;
+    await getSerialApi();
+    let last=null;
+    for(const url of ['https://unpkg.com/esptool-js@0.6.0/bundle.js','https://cdn.jsdelivr.net/npm/esptool-js@0.6.0/bundle.js']){
+      try{
+        usbLog('Loading bundled Espressif flasher…');
+        const mod=await import(url);
+        if(mod?.ESPLoader&&mod?.Transport){toolModule=mod;return mod;}
+        last=new Error('Bundle loaded but ESPLoader/Transport exports were missing.');
+      }catch(e){last=e;console.warn('[GoSmart USB v2] bundle load failed',url,e)}
+    }
+    throw new Error(`Espressif bundled flasher could not load. ${last?.message||''}`.trim());
+  }
+
+  async function disconnectFlasher(){
+    try{if(transport)await Promise.race([transport.disconnect(),sleep(1200)])}catch(_){}
+    transport=null;loader=null;flashPort=null;connecting=false;
+    if($('usbFlashBtn'))$('usbFlashBtn').disabled=true;
+  }
+
+  window.usbConnect=async function(){
+    const btn=$('usbConnectBtn');if(connecting)return;connecting=true;
+    if(btn){btn.disabled=true;btn.textContent='Opening USB…'}
+    if($('usbChip'))$('usbChip').textContent='Waiting for device';
+    usbLog('Starting USB connection…');
+    try{
+      const mod=await loadBundledEsptool();
+      const api=await getSerialApi();
+      usbLog('Select your ESP32 / USB Serial port…');
+      flashPort=await api.requestPort({});
+      if(!flashPort)throw new Error('No USB serial device selected.');
+      transport=new mod.Transport(flashPort,true);
+      loader=new mod.ESPLoader({transport,baudrate:Number($('usbBaud')?.value||115200),terminal:terminal(),debugLogging:false});
+      usbLog('Detecting ESP32 bootloader…');
+      const chipName=await loader.main();
+      const detected=chipName||loader.chip?.CHIP_NAME||'ESP32';
+      if($('usbChip'))$('usbChip').textContent=`✓ ${detected} connected`;
+      if($('usbFlashBtn'))$('usbFlashBtn').disabled=false;
+      if(btn){btn.textContent='Connected';btn.disabled=false;}
+      usbLog(`✓ ${detected} connected. Select a .bin and press Flash USB.`);
+    }catch(e){
+      await disconnectFlasher();
+      if(btn){btn.textContent='Connect ESP32';btn.disabled=false;}
+      if($('usbChip'))$('usbChip').textContent='Not connected';
+      usbLog(`✕ ${e?.message||e}`);
+    }finally{connecting=false;}
+  };
+
+  window.usbFlash=async function(){
+    if(!loader){usbLog('Connect ESP32 first.');return;}
+    const file=$('usbFirmwareFile')?.files?.[0];
+    if(!file){usbLog('Choose a .bin firmware file first.');return;}
+    const btn=$('usbFlashBtn');if(btn)btn.disabled=true;
+    if($('usbProgressBar'))$('usbProgressBar').style.width='0%';
+    try{
+      const data=new Uint8Array(await file.arrayBuffer());
+      const address=parseInt($('usbAddress')?.value||'0x10000',16);
+      const flashSize=$('usbFlashSize')?.value||'4MB';
+      usbLog(`Flashing ${file.name} at 0x${address.toString(16).toUpperCase()}…`);
+      await loader.writeFlash({fileArray:[{data,address}],flashMode:'dio',flashFreq:'40m',flashSize,eraseAll:Boolean($('usbErase')?.checked),compress:true,reportProgress(_i,written,total){const pct=total?(written/total)*100:0;if($('usbProgressBar'))$('usbProgressBar').style.width=`${pct}%`;usbLog(`Flashing… ${Math.round(pct)}%`)}});
+      if($('usbProgressBar'))$('usbProgressBar').style.width='100%';
+      usbLog('✓ Flash complete. Resetting ESP32…');
+      try{await loader.after('hard_reset')}catch(_){}
+      await disconnectFlasher();
+      if($('usbConnectBtn')){$('usbConnectBtn').textContent='Connect ESP32';$('usbConnectBtn').disabled=false;}
+      if($('usbChip'))$('usbChip').textContent='Flash complete · disconnected';
+      usbLog('✓ Flash successful. ESP32 rebooted.');
+    }catch(e){usbLog(`✕ Flash failed: ${e?.message||e}`);if(btn)btn.disabled=false;}
+  };
+
+  setTimeout(()=>{if($('usbStatus'))usbLog('USB flasher v2 ready. Plug in ESP32 and press Connect ESP32.');},350);
+})();

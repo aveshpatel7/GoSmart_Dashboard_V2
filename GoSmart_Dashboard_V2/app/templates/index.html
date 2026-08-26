@@ -38,7 +38,7 @@
       <button class="nav" data-page="settings">⚙ <span>Device Meta</span></button>
     </nav>
     <div class="sidebar-bottom">
-      <span class="status-dot" id="mqttDot"></span> MQTT <span id="mqttText">connecting</span>
+      <span><span class="status-dot" id="mqttDot"></span> MQTT <span id="mqttText">connecting</span></span>
       <form action="/logout" method="post"><button class="ghost wide">Log out</button></form>
     </div>
   </aside>
@@ -71,9 +71,10 @@
 
     <section class="page" id="page-control">
       <div class="toolbar"><select id="controlNode"></select><button class="secondary" onclick="localStatePrompt()">Check Local /state</button></div>
+      <div id="controlFeedback" class="control-feedback" aria-live="polite"></div>
       <div class="control-grid">
-        <article class="card"><h3>Relay channels</h3><div class="relay-grid" id="relayGrid"></div><div class="master"><button class="primary" onclick="command(6,null,'ON')">ALL ON</button><button class="danger-btn" onclick="command(7,null,'OFF')">ALL OFF</button></div></article>
-        <article class="card fan-card"><h3>Fan</h3><div class="fan-orb">🌀</div><div id="fanState" class="big-state">OFF</div><div class="speed-row" id="speedRow"></div></article>
+        <article class="card"><div class="card-head"><h3>Relay channels</h3><span class="muted">Instant UI response</span></div><div class="relay-grid" id="relayGrid"></div><div class="master"><button id="allOnBtn" class="primary" onclick="command(6,null,'ON')">ALL ON</button><button id="allOffBtn" class="danger-btn" onclick="command(7,null,'OFF')">ALL OFF</button></div></article>
+        <article class="card fan-card"><h3>Fan</h3><div class="fan-orb" id="fanOrb">🌀</div><div id="fanState" class="big-state">OFF</div><div class="speed-row" id="speedRow"></div></article>
       </div>
     </section>
 
@@ -83,8 +84,25 @@
 
     <section class="page" id="page-ota">
       <div class="grid two">
-        <article class="card"><h3>Firmware library</h3><div id="firmwareList"></div><form id="uploadForm"><input type="file" name="file" required><button class="primary">Upload firmware</button></form></article>
-        <article class="card"><h3>OTA campaign</h3><select id="otaNode"></select><select id="otaFile"></select><button class="primary wide" onclick="sendOta()">Send OTA</button><div id="otaStatus" class="progress-box">No active OTA campaign.</div></article>
+        <article class="card"><h3>Firmware library</h3><div id="firmwareList"></div><form id="uploadForm"><input type="file" name="file" accept=".bin" required><button class="primary" id="uploadBtn">Upload firmware</button></form><div id="uploadStatus" class="progress-box">Ready.</div></article>
+        <article class="card"><h3>OTA campaign</h3><select id="otaNode"></select><select id="otaFile"></select><button id="otaBtn" class="primary wide" onclick="sendOta()">Send OTA</button><div id="otaStatus" class="progress-box">No active OTA campaign.</div></article>
+      </div>
+      <div class="grid two ota-tools">
+        <article class="card usb-flash-card">
+          <div class="card-head"><div><h3>USB Flash</h3><p class="muted">Flash an ESP32 directly from Chrome/Edge using Web Serial + Espressif esptool-js. This is local USB flashing; it does not use MQTT.</p></div><span class="usb-badge">USB</span></div>
+          <div class="usb-grid">
+            <input id="usbFirmwareFile" type="file" accept=".bin">
+            <select id="usbAddress"><option value="0x10000">App firmware · 0x10000</option><option value="0x0">Merged image · 0x0000</option></select>
+            <select id="usbFlashSize"><option value="4MB">4 MB</option><option value="8MB">8 MB</option><option value="16MB">16 MB</option></select>
+            <select id="usbBaud"><option value="460800">460800 baud</option><option value="115200">115200 baud</option><option value="921600">921600 baud</option></select>
+          </div>
+          <label class="check-row"><input id="usbErase" type="checkbox"> Erase entire flash before writing</label>
+          <div class="usb-actions"><button id="usbConnectBtn" class="secondary" onclick="usbConnect()">Connect ESP32</button><button id="usbFlashBtn" class="primary" onclick="usbFlash()" disabled>Flash USB</button></div>
+          <div id="usbChip" class="usb-chip">Not connected</div>
+          <div class="progress-track"><i id="usbProgressBar"></i></div>
+          <div id="usbStatus" class="progress-box">Plug in the ESP32, choose a .bin, then Connect ESP32.</div>
+        </article>
+        <article class="card"><h3>OTA notes</h3><div class="alert">OTA updates use the existing MQTT control path and discovered Node IDs. USB Flash is independent and requires a local browser with Web Serial support.</div><p class="muted">For normal fleet deployment use OTA. Use USB Flash when the board is physically connected to this computer.</p></article>
       </div>
     </section>
 

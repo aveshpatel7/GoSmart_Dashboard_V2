@@ -31,23 +31,10 @@
     if(!node){ feedback('Select a device first','error'); return false; }
     speed = Math.max(0, Math.min(4, Number(speed)||0));
     const status = speed === 0 ? 'OFF' : 'ON';
-
-    // Optimistic visual feedback immediately.
-    try {
-      if(window.optimisticState){
-        if(!window.optimisticState[node]) window.optimisticState[node] = {relays:{},relayAt:{},speed:null,speedAt:0};
-        window.optimisticState[node].speed = speed;
-        window.optimisticState[node].speedAt = Date.now();
-      }
-    } catch(_){}
-    if(typeof window.renderControl === 'function') window.renderControl();
     feedback(speed===0 ? 'Turning fan OFF…' : `Setting fan speed S${speed}…`, 'busy');
-
     try {
-      // Exact ESP32 protocol: channel + status + speed.
       await postControl(node, 5, status, speed);
       feedback(speed===0 ? 'Fan OFF command sent' : `Fan S${speed} command sent`, 'success');
-      // A second refresh is intentional: ESP32 fan relay switching includes a delay.
       setTimeout(()=>{ if(typeof window.refresh==='function') window.refresh(); }, 850);
       return true;
     } catch(e){
@@ -66,15 +53,11 @@
     feedback(turnOn ? 'Turning everything ON…' : 'Turning everything OFF…','busy');
 
     try {
-      // Do not depend on master channel 6/7. Individual relay commands are already
-      // proven on this firmware, so the dashboard fans them out reliably.
       for(let ch=1; ch<=4; ch++){
         await postControl(node, ch, status, null);
         await sleep(90);
       }
-
       if(turnOn){
-        // Restore a sensible fan speed. Prefer dashboard-known remembered/current speed.
         let d = (window.DATA?.telemetry?.[node] || window.DATA?.devices?.[node]?.telemetry || {});
         let fanSpeed = Number(d.speed || d.fan_speed_memory || 1);
         if(!Number.isFinite(fanSpeed) || fanSpeed < 1 || fanSpeed > 4) fanSpeed = 1;
@@ -82,7 +65,6 @@
       } else {
         await postControl(node, 5, 'OFF', 0);
       }
-
       feedback(turnOn ? 'ALL ON commands sent' : 'ALL OFF commands sent','success');
       setTimeout(()=>{ if(typeof window.refresh==='function') window.refresh(); }, 1000);
       return true;
@@ -95,7 +77,6 @@
     }
   }
 
-  // Replace only channel 5/6/7 handling. Relay 1-4 keep the stable original path.
   const originalCommand = window.command;
   window.command = async function(channel, speed, status){
     channel = Number(channel);
@@ -106,13 +87,20 @@
   };
   window.masterCommand = masterCommand;
 
-  /* -------- USB FLASH: esptool-js 0.6.0 correct API -------- */
+  /* -------- USB FLASH: native Web Serial + Android WebUSB polyfill -------- */
   let toolModule = null;
+  let serialApi = null;
   let transport = null;
   let loader = null;
   let port = null;
+  let connecting = false;
 
-  function usbLog(msg){ const el=$('usbStatus'); if(el) el.textContent=String(msg); }
+  function usbLog(msg){
+    const el=$('usbStatus');
+    if(el) el.textContent=String(msg);
+    console.log('[GoSmart USB]', msg);
+  }
+
   function terminal(){
     return {
       clean(){},
@@ -121,29 +109,66 @@
     };
   }
 
+  async function getSerialApi(){
+    if(serialApi) return serialApi;
+    if(!window.isSecureContext) throw new Error('USB Flash needs HTTPS. Open the deployed https:// dashboard.');
+
+    // Desktop Chrome/Edge: use the native Web Serial API.
+    if(navigator.serial && typeof navigator.serial.requestPort === 'function'){
+      serialApi = navigator.serial;
+      return serialApi;
+    }
+
+    // Android Chrome does not expose native Web Serial. Espressif documents
+    // web-serial-polyfill as the compatibility layer on top of WebUSB.
+    if(navigator.usb && typeof navigator.usb.requestDevice === 'function'){
+      usbLog('Android/WebUSB detected. Loading USB-to-Serial compatibility layer…');
+      const poly = await import('https://unpkg.com/web-serial-polyfill@1.0.15/dist/serial.js');
+      serialApi = poly.serial || poly.default?.serial || poly.default;
+      if(!serialApi || typeof serialApi.requestPort !== 'function'){
+        throw new Error('Web Serial compatibility layer could not start. Use Chrome and allow USB access.');
+      }
+      return serialApi;
+    }
+
+    throw new Error('This browser cannot access USB serial. Open this dashboard directly in Chrome/Edge, not an in-app browser.');
+  }
+
   async function loadTool(){
     if(toolModule) return toolModule;
-    if(!window.isSecureContext) throw new Error('USB Flash needs HTTPS.');
-    if(!('serial' in navigator)) throw new Error('Use Chrome/Edge with Web Serial support.');
-    // ESM entrypoint; v0.6.0 writeFlash expects Uint8Array data.
+    await getSerialApi();
     toolModule = await import('https://unpkg.com/esptool-js@0.6.0/lib/index.js');
+    if(!toolModule?.ESPLoader || !toolModule?.Transport) throw new Error('Espressif flashing library failed to load.');
     return toolModule;
   }
 
   async function cleanDisconnect(){
-    try { if(transport) await transport.disconnect(); } catch(_){}
-    transport = null; loader = null; port = null;
+    try { if(transport) await Promise.race([transport.disconnect(), sleep(1200)]); } catch(_){}
+    transport = null;
+    loader = null;
+    port = null;
+    connecting = false;
     if($('usbFlashBtn')) $('usbFlashBtn').disabled = true;
   }
 
   window.usbConnect = async function(){
     const btn=$('usbConnectBtn');
+    if(connecting) return;
+    connecting = true;
+    if(btn){ btn.disabled=true; btn.textContent='Opening USB…'; }
+    if($('usbChip')) $('usbChip').textContent='Waiting for device';
+    usbLog('Starting USB connection…');
+
     try {
       const mod = await loadTool();
-      await cleanDisconnect();
-      usbLog('Choose your ESP32 serial port…');
-      port = await navigator.serial.requestPort();
-      // Espressif example uses tracing=true here; importantly, Transport must own the port.
+      // Do not call disconnect before the chooser; some Android polyfill versions can hang there.
+      transport = null; loader = null; port = null;
+
+      usbLog('Choose your ESP32 / USB Serial device in the browser popup…');
+      port = await serialApi.requestPort({});
+      if(!port) throw new Error('No serial device selected.');
+
+      usbLog('Device selected. Connecting to ESP32 bootloader…');
       transport = new mod.Transport(port, true);
       loader = new mod.ESPLoader({
         transport,
@@ -151,17 +176,23 @@
         terminal: terminal(),
         debugLogging: false
       });
-      usbLog('Connecting and detecting chip…');
+
       const chipName = await loader.main();
-      if($('usbChip')) $('usbChip').textContent = `✓ ${chipName || loader.chip?.CHIP_NAME || 'ESP32'} connected`;
+      const detected = chipName || loader.chip?.CHIP_NAME || 'ESP32';
+      if($('usbChip')) $('usbChip').textContent = `✓ ${detected} connected`;
       if($('usbFlashBtn')) $('usbFlashBtn').disabled = false;
-      if(btn) btn.textContent = 'Connected';
-      usbLog('Connected. Select the correct .bin/address and press Flash USB.');
+      if(btn){ btn.textContent='Connected'; btn.disabled=false; }
+      usbLog(`✓ ${detected} connected. Choose a .bin and press Flash USB.`);
     } catch(e){
-      await cleanDisconnect();
-      if(btn) btn.textContent='Connect ESP32';
+      const message = e?.message || String(e);
+      try { if(transport) await Promise.race([transport.disconnect(), sleep(600)]); } catch(_){}
+      transport=null; loader=null; port=null;
+      if(btn){ btn.textContent='Connect ESP32'; btn.disabled=false; }
       if($('usbChip')) $('usbChip').textContent='Not connected';
-      usbLog(`✕ ${e.message || e}`);
+      if($('usbFlashBtn')) $('usbFlashBtn').disabled=true;
+      usbLog(`✕ ${message}`);
+    } finally {
+      connecting=false;
     }
   };
 
@@ -198,20 +229,41 @@
       if($('usbProgressBar')) $('usbProgressBar').style.width='100%';
       usbLog('✓ Flash complete. Resetting ESP32…');
       try { await loader.after('hard_reset'); } catch(_){}
-      await cleanDisconnect();
-      if($('usbConnectBtn')) $('usbConnectBtn').textContent='Connect ESP32';
+      try { if(transport) await Promise.race([transport.disconnect(), sleep(1000)]); } catch(_){}
+      transport=null; loader=null; port=null;
+      if($('usbConnectBtn')) { $('usbConnectBtn').textContent='Connect ESP32'; $('usbConnectBtn').disabled=false; }
+      if($('usbFlashBtn')) $('usbFlashBtn').disabled=true;
       if($('usbChip')) $('usbChip').textContent='Flash complete · disconnected';
       usbLog('✓ Flash successful. ESP32 rebooted.');
     } catch(e){
-      usbLog(`✕ Flash failed: ${e.message || e}`);
+      usbLog(`✕ Flash failed: ${e?.message || e}`);
       if(btn) btn.disabled=false;
     }
   };
 
-  navigator.serial?.addEventListener?.('disconnect', async ()=>{
-    await cleanDisconnect();
-    if($('usbConnectBtn')) $('usbConnectBtn').textContent='Connect ESP32';
-    if($('usbChip')) $('usbChip').textContent='Disconnected';
-    usbLog('USB device disconnected.');
-  });
+  // Show browser capability immediately, so the Connect button never feels dead.
+  setTimeout(()=>{
+    const btn=$('usbConnectBtn');
+    if(!btn) return;
+    btn.disabled=false;
+    if(!window.isSecureContext){
+      usbLog('USB Flash unavailable here: HTTPS is required.');
+    } else if(navigator.serial){
+      usbLog('USB ready. Plug in ESP32 and press Connect ESP32.');
+    } else if(navigator.usb){
+      usbLog('Android USB mode ready. Plug ESP32 through USB OTG and press Connect ESP32.');
+    } else {
+      usbLog('USB access is not available in this browser. Open the dashboard in Chrome/Edge.');
+    }
+  }, 250);
+
+  if(navigator.serial?.addEventListener){
+    navigator.serial.addEventListener('disconnect', async ()=>{
+      transport=null;loader=null;port=null;
+      if($('usbConnectBtn')) { $('usbConnectBtn').textContent='Connect ESP32'; $('usbConnectBtn').disabled=false; }
+      if($('usbFlashBtn')) $('usbFlashBtn').disabled=true;
+      if($('usbChip')) $('usbChip').textContent='Disconnected';
+      usbLog('USB device disconnected.');
+    });
+  }
 })();

@@ -28,10 +28,10 @@ app.secret_key = os.getenv("FLASK_SECRET_KEY", "change-me-in-production")
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "change-me")
 
-MQTT_BROKER = os.getenv("MQTT_BROKER", "i26a1c71.ala.asia-southeast1.emqxsl.com")
-MQTT_PORT = int(os.getenv("MQTT_PORT", "8883"))
-MQTT_USER = os.getenv("MQTT_USER", "smartnest_client")
-MQTT_PASS = os.getenv("MQTT_PASS", "change-me")
+const char* mqtt_server = "i26a1c71.ala.asia-southeast1.emqxsl.com";
+const int mqtt_port = 8883;
+const char* mqtt_user = "smartnest_client";
+const char* mqtt_pass = "D2m9ga8JynJDEM6";
 
 NODES_FILE = DATA_DIR / "active_nodes.json"
 TELEMETRY_FILE = DATA_DIR / "telemetry_data.json"

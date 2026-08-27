@@ -1,46 +1,67 @@
-/* Go Smart Organized Shell v2 — larger desktop navigation + Device Doctor polish. */
-body:not(.is-android) .sidebar{width:258px;padding:20px 14px}
-body:not(.is-android) .main{margin-left:258px;width:calc(100% - 258px)}
-body:not(.is-android) .brand{margin:4px 8px 24px;gap:12px}
-body:not(.is-android) .brand .brand-mark{width:44px;height:44px;border-radius:13px;font-size:15px}
-body:not(.is-android) .brand b{font-size:15px;letter-spacing:.2px}
-body:not(.is-android) .brand small{font-size:9px;letter-spacing:1.5px;margin-top:4px}
+/* Go Smart Organized Shell v3 — readable desktop navigation + larger dashboard typography. */
+body:not(.is-android){font-size:15px}
+body:not(.is-android) .sidebar{width:276px;padding:22px 16px}
+body:not(.is-android) .main{margin-left:276px;width:calc(100% - 276px)}
+body:not(.is-android) .brand{margin:4px 8px 26px;gap:13px}
+body:not(.is-android) .brand .brand-mark{width:48px;height:48px;border-radius:14px;font-size:17px}
+body:not(.is-android) .brand b{font-size:17px;letter-spacing:.15px}
+body:not(.is-android) .brand small{font-size:10px;letter-spacing:1.4px;margin-top:4px}
 body:not(.is-android) .sidebar nav{display:block;overflow:auto;padding-right:3px;scrollbar-width:thin}
-body:not(.is-android) .nav-section{border-bottom:1px solid rgba(120,160,170,.12);padding:5px 0 10px;margin-bottom:6px}
-body:not(.is-android) .nav-section-head{width:100%;min-height:38px;border:0;background:transparent;color:#75929c;display:flex;align-items:center;justify-content:space-between;padding:6px 10px;font-size:11.5px;font-weight:850;letter-spacing:1.45px;text-align:left}
-body:not(.is-android) .nav-section-head span{display:flex;align-items:center;gap:9px}
-body:not(.is-android) .nav-section-head i{font-style:normal;color:var(--accent,#62e8c4);font-size:14px;min-width:16px;text-align:center}
-body:not(.is-android) .nav-section-head b{font-size:14px;transition:transform .16s ease;color:#708991}
+body:not(.is-android) .nav-section{border-bottom:1px solid rgba(120,160,170,.12);padding:6px 0 11px;margin-bottom:7px}
+body:not(.is-android) .nav-section-head{width:100%;min-height:42px;border:0;background:transparent;color:#82a0aa;display:flex;align-items:center;justify-content:space-between;padding:7px 11px;font-size:12.5px;font-weight:850;letter-spacing:1.35px;text-align:left}
+body:not(.is-android) .nav-section-head span{display:flex;align-items:center;gap:10px}
+body:not(.is-android) .nav-section-head i{font-style:normal;color:var(--accent,#62e8c4);font-size:15px;min-width:18px;text-align:center}
+body:not(.is-android) .nav-section-head b{font-size:15px;transition:transform .16s ease;color:#708991}
 body:not(.is-android) .nav-section.collapsed .nav-section-head b{transform:rotate(-90deg)}
-body:not(.is-android) .nav-section-body{display:grid;gap:4px;overflow:hidden}
+body:not(.is-android) .nav-section-body{display:grid;gap:5px;overflow:hidden}
 body:not(.is-android) .nav-section.collapsed .nav-section-body{display:none}
-body:not(.is-android) .nav-section .nav{width:100%;padding:11px 12px;border-radius:11px;font-size:14px;font-weight:560;gap:11px;margin:0;min-height:44px;line-height:1.15}
-body:not(.is-android) .nav-section .nav>span{font-size:14px;letter-spacing:.05px}
-body:not(.is-android) .nav-section.has-active>.nav-section-head{color:#d2e3e7}
-body:not(.is-android) .nav-section .nav.active{background:linear-gradient(90deg,rgba(98,232,196,.15),rgba(98,232,196,.045));box-shadow:inset 3px 0 0 var(--accent,#62e8c4);color:#eefafa}
-body:not(.is-android) .nav-section .nav:hover{background:rgba(98,232,196,.07);color:#e8f4f6}
-body:not(.is-android) .sidebar-bottom{padding:10px 6px 0;font-size:12px}
-body:not(.is-android) .sidebar-fleet-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:0 0 10px;padding:9px;border:1px solid rgba(120,160,170,.15);border-radius:12px;background:rgba(7,24,30,.56)}
-body:not(.is-android) .sidebar-fleet-mini>div{min-width:0;text-align:center;padding:5px 2px;border-radius:9px;background:rgba(255,255,255,.025)}
-body:not(.is-android) .sidebar-fleet-mini b{display:block;font-size:15px;color:#e9f6f7}
-body:not(.is-android) .sidebar-fleet-mini span{display:block;margin-top:2px;font-size:8.5px;text-transform:uppercase;letter-spacing:.8px;color:#78929a}
+body:not(.is-android) .nav-section .nav{width:100%;padding:12px 13px;border-radius:12px;font-size:15.5px;font-weight:600;gap:12px;margin:0;min-height:48px;line-height:1.15}
+body:not(.is-android) .nav-section .nav>span{font-size:15.5px;letter-spacing:.02px}
+body:not(.is-android) .nav-section.has-active>.nav-section-head{color:#d9e9ec}
+body:not(.is-android) .nav-section .nav.active{background:linear-gradient(90deg,rgba(98,232,196,.18),rgba(98,232,196,.05));box-shadow:inset 3px 0 0 var(--accent,#62e8c4);color:#f4ffff}
+body:not(.is-android) .nav-section .nav:hover{background:rgba(98,232,196,.08);color:#f0fafb}
+body:not(.is-android) .sidebar-bottom{padding:11px 6px 0;font-size:13px}
+
+/* Readability pass across desktop dashboard */
+body:not(.is-android) .topbar h2{font-size:22px!important;font-weight:800}
+body:not(.is-android) .topbar p{font-size:13px!important}
+body:not(.is-android) .card h3,body:not(.is-android) .card-head h3{font-size:18px!important;line-height:1.25}
+body:not(.is-android) .card h4{font-size:15px!important}
+body:not(.is-android) .muted{font-size:12.5px!important;line-height:1.45}
+body:not(.is-android) .eyebrow{font-size:11.5px!important;font-weight:800}
+body:not(.is-android) .stat span,body:not(.is-android) .metric span,body:not(.is-android) .u-kpi span,body:not(.is-android) .pro-kpi span{font-size:12.5px!important}
+body:not(.is-android) .stat b{font-size:30px!important}
+body:not(.is-android) .metric b,body:not(.is-android) .u-kpi b,body:not(.is-android) .pro-kpi b{font-size:18px!important}
+body:not(.is-android) table th{font-size:12.5px!important;font-weight:800}
+body:not(.is-android) table td{font-size:13.5px!important}
+body:not(.is-android) button,body:not(.is-android) select,body:not(.is-android) input,body:not(.is-android) textarea{font-size:14px}
+body:not(.is-android) .pill,body:not(.is-android) .severity{font-size:11px!important}
+body:not(.is-android) .log-item,body:not(.is-android) .console{font-size:12.5px!important;line-height:1.45}
+body:not(.is-android) .bar-label{font-size:13px!important}
+body:not(.is-android) .relay b{font-size:16px!important}
+body:not(.is-android) .big-state{font-size:24px!important}
+
+body:not(.is-android) .sidebar-fleet-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:0 0 11px;padding:10px;border:1px solid rgba(120,160,170,.15);border-radius:13px;background:rgba(7,24,30,.56)}
+body:not(.is-android) .sidebar-fleet-mini>div{min-width:0;text-align:center;padding:6px 2px;border-radius:9px;background:rgba(255,255,255,.025)}
+body:not(.is-android) .sidebar-fleet-mini b{display:block;font-size:17px;color:#e9f6f7}
+body:not(.is-android) .sidebar-fleet-mini span{display:block;margin-top:2px;font-size:9.5px;text-transform:uppercase;letter-spacing:.75px;color:#78929a}
 body:not(.is-android) .sidebar-fleet-mini .ok b{color:#62e8c4}
 body:not(.is-android) .sidebar-fleet-mini .warn b{color:#ffd166}
-body:not(.is-android) .nav-badge{margin-left:auto;min-width:22px;height:20px;padding:0 6px;border-radius:999px;display:inline-grid;place-items:center;background:rgba(98,232,196,.13);border:1px solid rgba(98,232,196,.2);color:#8ff4db;font-size:10px;font-weight:800}
+body:not(.is-android) .nav-badge{margin-left:auto;min-width:24px;height:22px;padding:0 7px;border-radius:999px;display:inline-grid;place-items:center;background:rgba(98,232,196,.13);border:1px solid rgba(98,232,196,.2);color:#8ff4db;font-size:11px;font-weight:850}
 body:not(.is-android) .nav-badge.alert{background:rgba(255,209,102,.12);border-color:rgba(255,209,102,.22);color:#ffd166}
 
-body:not(.is-android) #page-diagnostics>.card{padding:18px;border-radius:18px}
-body:not(.is-android) #page-diagnostics .toolbar{display:grid;grid-template-columns:minmax(260px,1fr) auto;max-width:680px;gap:10px;align-items:center;margin-bottom:10px}
-body:not(.is-android) #page-diagnostics .toolbar select{min-height:42px}
-body:not(.is-android) #page-diagnostics .toolbar button{min-height:42px;padding:0 18px;border-radius:12px;user-select:none;-webkit-user-select:none;position:relative;overflow:hidden}
+body:not(.is-android) #page-diagnostics>.card{padding:20px;border-radius:18px}
+body:not(.is-android) #page-diagnostics .toolbar{display:grid;grid-template-columns:minmax(300px,1fr) auto;max-width:760px;gap:11px;align-items:center;margin-bottom:11px}
+body:not(.is-android) #page-diagnostics .toolbar select{min-height:46px;font-size:14px}
+body:not(.is-android) #page-diagnostics .toolbar button{min-height:46px;padding:0 20px;border-radius:12px;user-select:none;-webkit-user-select:none;position:relative;overflow:hidden;font-size:14px;font-weight:800}
 body:not(.is-android) #page-diagnostics .toolbar button:active{transform:translateY(1px) scale(.99)}
-body:not(.is-android) #page-diagnostics .toolbar button.diag-running{padding-left:40px}
-body:not(.is-android) #page-diagnostics .toolbar button.diag-running:before{content:"";position:absolute;left:16px;top:50%;width:13px;height:13px;margin-top:-7px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:diagSpin .7s linear infinite}
+body:not(.is-android) #page-diagnostics .toolbar button.diag-running{padding-left:42px}
+body:not(.is-android) #page-diagnostics .toolbar button.diag-running:before{content:"";position:absolute;left:17px;top:50%;width:14px;height:14px;margin-top:-7px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:diagSpin .7s linear infinite}
 @keyframes diagSpin{to{transform:rotate(360deg)}}
-.diag-run-status{display:grid;grid-template-columns:10px 1fr;grid-template-rows:auto auto;column-gap:9px;max-width:680px;margin:0 0 16px;padding:10px 12px;border:1px solid #17343d;background:#09171d;border-radius:12px}
-.diag-run-status>span{grid-row:1/3;width:9px;height:9px;border-radius:50%;margin-top:4px;background:#67808a}
-.diag-run-status b{font-size:12px;color:#dbe9ec}
-.diag-run-status small{font-size:10px;color:#6f8992;margin-top:2px}
+.diag-run-status{display:grid;grid-template-columns:11px 1fr;grid-template-rows:auto auto;column-gap:10px;max-width:760px;margin:0 0 17px;padding:11px 13px;border:1px solid #17343d;background:#09171d;border-radius:12px}
+.diag-run-status>span{grid-row:1/3;width:10px;height:10px;border-radius:50%;margin-top:4px;background:#67808a}
+.diag-run-status b{font-size:13px;color:#dbe9ec}
+.diag-run-status small{font-size:11px;color:#6f8992;margin-top:2px}
 .diag-run-status[data-state="busy"]>span{background:#ffc65a;box-shadow:0 0 0 4px rgba(255,198,90,.10)}
 .diag-run-status[data-state="ok"]>span{background:#62e8c4;box-shadow:0 0 0 4px rgba(98,232,196,.10)}
 .diag-run-status[data-state="error"]>span{background:#ff737b;box-shadow:0 0 0 4px rgba(255,115,123,.10)}
@@ -48,14 +69,15 @@ body:not(.is-android) #page-diagnostics .toolbar button.diag-running:before{cont
 #diagnosticPanel.diag-flash{animation:diagFlash .45s ease-out}
 @keyframes diagFlash{0%{opacity:.55;transform:translateY(3px)}100%{opacity:1;transform:none}}
 
-body:not(.is-android) .top-actions{gap:8px}
-body:not(.is-android) .pro-theme-switch{padding:3px 5px;border:1px solid rgba(120,160,170,.14);border-radius:12px;background:rgba(9,23,29,.55)}
-body:not(.is-android) .pro-theme-switch button{width:24px;height:24px;border-radius:7px!important}
+body:not(.is-android) .top-actions{gap:9px}
+body:not(.is-android) .pro-theme-switch{padding:4px 6px;border:1px solid rgba(120,160,170,.14);border-radius:12px;background:rgba(9,23,29,.55)}
+body:not(.is-android) .pro-theme-switch button{width:26px;height:26px;border-radius:8px!important}
 
 @media(max-width:1150px) and (min-width:901px){
- body:not(.is-android) .sidebar{width:232px;padding-left:11px;padding-right:11px}
- body:not(.is-android) .main{margin-left:232px;width:calc(100% - 232px);padding-left:20px;padding-right:20px}
- body:not(.is-android) .nav-section .nav,body:not(.is-android) .nav-section .nav>span{font-size:13px}
+ body:not(.is-android) .sidebar{width:245px;padding-left:12px;padding-right:12px}
+ body:not(.is-android) .main{margin-left:245px;width:calc(100% - 245px);padding-left:20px;padding-right:20px}
+ body:not(.is-android) .nav-section .nav,body:not(.is-android) .nav-section .nav>span{font-size:14.5px}
+ body:not(.is-android) .nav-section-head{font-size:11.5px}
 }
 @media(max-width:900px){
  .diag-run-status{max-width:none}

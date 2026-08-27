@@ -15,16 +15,16 @@
 
   function loadThemeSettings(){
     if(!document.getElementById('goSmartThemeSettingsCss')){
-      const l=document.createElement('link');l.id='goSmartThemeSettingsCss';l.rel='stylesheet';l.href='/static/css/theme_settings.css?v=20260827t1';document.head.appendChild(l);
+      const l=document.createElement('link');l.id='goSmartThemeSettingsCss';l.rel='stylesheet';l.href='/static/css/theme_settings.css?v=20260827t2';document.head.appendChild(l);
     }
     if(!document.getElementById('goSmartThemeSettingsJs')){
-      const s=document.createElement('script');s.id='goSmartThemeSettingsJs';s.src='/static/js/theme_settings.js?v=20260827t1';s.defer=true;document.body.appendChild(s);
+      const s=document.createElement('script');s.id='goSmartThemeSettingsJs';s.src='/static/js/theme_settings.js?v=20260827t2';s.defer=true;document.body.appendChild(s);
     }
   }
 
   function loadOrganizedShell(){
     if(!document.getElementById('goSmartOrganizedCss')){
-      const l=document.createElement('link');l.id='goSmartOrganizedCss';l.rel='stylesheet';l.href='/static/css/organized_shell.css?v=20260827o3';document.head.appendChild(l);
+      const l=document.createElement('link');l.id='goSmartOrganizedCss';l.rel='stylesheet';l.href='/static/css/organized_shell.css?v=20260827o4';document.head.appendChild(l);
     }
     if(!document.getElementById('goSmartOrganizedJs')){
       const s=document.createElement('script');s.id='goSmartOrganizedJs';s.src='/static/js/organized_shell.js?v=20260827o2';s.defer=true;document.body.appendChild(s);
@@ -32,6 +32,11 @@
     if(!document.getElementById('goSmartSidebarEnhanceJs')){
       const s=document.createElement('script');s.id='goSmartSidebarEnhanceJs';s.src='/static/js/sidebar_enhance.js?v=20260827s1';s.defer=true;document.body.appendChild(s);
     }
+  }
+
+  function loadUltimateSizing(){
+    const old=document.getElementById('goSmartUltimateSizingCss');if(old)return;
+    const l=document.createElement('link');l.id='goSmartUltimateSizingCss';l.rel='stylesheet';l.href='/static/css/ultimate.css?v=20260827u2';document.head.appendChild(l);
   }
 
   function loadDashboard2026(){
@@ -71,7 +76,7 @@
     }
   }
 
-  loadProLayer();loadThemeSettings();loadDashboard2026();setTimeout(loadOrganizedShell,60);
-  document.addEventListener('DOMContentLoaded',()=>{wire();loadProLayer();loadThemeSettings();loadDashboard2026();setTimeout(loadOrganizedShell,60)});
+  loadProLayer();loadThemeSettings();loadUltimateSizing();loadDashboard2026();setTimeout(loadOrganizedShell,60);
+  document.addEventListener('DOMContentLoaded',()=>{wire();loadProLayer();loadThemeSettings();loadUltimateSizing();loadDashboard2026();setTimeout(loadOrganizedShell,60)});
   setTimeout(wire,0);
 })();

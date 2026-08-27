@@ -8,9 +8,8 @@
     css('goSmartProCss','/static/css/pro.css?v=20260827p1');if(!window.goSmartProLoaded){js('goSmartProJs','/static/js/pro.js?v=20260827p1');window.goSmartProLoaded=true}
     css('goSmartThemeSettingsCss','/static/css/theme_settings.css?v=20260827t2');js('goSmartThemeSettingsJs','/static/js/theme_settings.js?v=20260827t2');
     css('goSmartUltimateSizingCss','/static/css/ultimate.css?v=20260827u3');
-    css('goSmartDash26Css','/static/css/dashboard_2026.css?v=20260827d1');js('goSmartDash26Js','/static/js/dashboard_2026.js?v=20260827d1');
-    js('goSmartDeviceOwnerOtaJs','/static/js/device_owner_ota.js?v=20260827do5');
-    js('goSmartWirelessMonitorJs','/static/js/wireless_monitor.js?v=20260827wm2');
+    css('goSmartDash26Css','/static/css/dashboard_2026.css?v=20260827d2');js('goSmartDash26Js','/static/js/dashboard_2026.js?v=20260827d1');
+    js('goSmartDeviceOwnerOtaJs','/static/js/device_owner_ota.js?v=20260827do6');
     setTimeout(()=>{css('goSmartOrganizedCss','/static/css/organized_shell.css?v=20260827o4');js('goSmartOrganizedJs','/static/js/organized_shell.js?v=20260827o2');js('goSmartSidebarEnhanceJs','/static/js/sidebar_enhance.js?v=20260827s1')},60);
   }
   function activateUltimate(){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById('page-ultimate')?.classList.add('active');document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));document.querySelector('.nav[data-page="ultimate"]')?.classList.add('active');const t=document.getElementById('pageTitle'),s=document.getElementById('pageSub');if(t)t.textContent='Ultimate Operations';if(s)s.textContent='Fleet, FastAPI and service command center';const api=document.getElementById('uApiBase');if(api&&!api.value)api.value=localStorage.getItem('gosmart_api_base')||PROD_API;window.scrollTo(0,0)}

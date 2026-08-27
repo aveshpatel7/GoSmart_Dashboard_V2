@@ -31,6 +31,15 @@
     }
   }
 
+  function loadDashboard2026(){
+    if(!document.getElementById('goSmartDash26Css')){
+      const l=document.createElement('link');l.id='goSmartDash26Css';l.rel='stylesheet';l.href='/static/css/dashboard_2026.css?v=20260827d1';document.head.appendChild(l);
+    }
+    if(!document.getElementById('goSmartDash26Js')){
+      const s=document.createElement('script');s.id='goSmartDash26Js';s.src='/static/js/dashboard_2026.js?v=20260827d1';s.defer=true;document.body.appendChild(s);
+    }
+  }
+
   function activateUltimate(){
     document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
     document.getElementById('page-ultimate')?.classList.add('active');
@@ -59,7 +68,7 @@
     }
   }
 
-  loadProLayer();loadThemeSettings();setTimeout(loadOrganizedShell,60);
-  document.addEventListener('DOMContentLoaded',()=>{wire();loadProLayer();loadThemeSettings();setTimeout(loadOrganizedShell,60)});
+  loadProLayer();loadThemeSettings();loadDashboard2026();setTimeout(loadOrganizedShell,60);
+  document.addEventListener('DOMContentLoaded',()=>{wire();loadProLayer();loadThemeSettings();loadDashboard2026();setTimeout(loadOrganizedShell,60)});
   setTimeout(wire,0);
 })();

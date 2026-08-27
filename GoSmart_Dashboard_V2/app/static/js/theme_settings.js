@@ -1,21 +1,21 @@
-/* Go Smart Theme Settings v1 — theme control lives only inside Settings. */
+/* Go Smart Theme Settings v2 — theme control lives only inside Settings. */
 (function(){
   const $=id=>document.getElementById(id);
   const THEMES={
     ocean:{label:'Ocean Teal',sub:'Deep ocean teal with cyan and green accents',cls:'gs-theme-ocean'},
     neon:{label:'Neon Nite',sub:'Dark futuristic purple / blue command-center look',cls:'gs-theme-neon'},
-    light:{label:'Light Modern',sub:'Clean bright interface with blue accents',cls:'gs-theme-light'}
+    light:{label:'Light Modern',sub:'Clean bright interface with blue accents',cls:'gs-theme-light'},
+    blackblue:{label:'Black & Blue',sub:'Deep black surfaces with bold electric-blue accents',cls:'gs-theme-blackblue'}
   };
 
   function current(){return localStorage.getItem('gosmart_visual_theme')||'ocean'}
   function applyTheme(name,announce=true){
     if(!THEMES[name])name='ocean';
     Object.values(THEMES).forEach(t=>document.body.classList.remove(t.cls));
-    /* retire older theme classes so only one system is authoritative */
     ['theme-neon','theme-midnight','theme-titanium','theme-apple','theme-industrial'].forEach(c=>document.body.classList.remove(c));
     document.body.classList.add(THEMES[name].cls);
     localStorage.setItem('gosmart_visual_theme',name);
-    localStorage.setItem('gosmart_theme',name==='ocean'?'neon':name==='neon'?'midnight':'light');
+    localStorage.setItem('gosmart_theme',name);
     document.querySelectorAll('.gs-theme-card').forEach(c=>c.classList.toggle('selected',c.dataset.theme===name));
     const text=$('gsCurrentTheme');if(text)text.textContent=THEMES[name].label;
     if(announce&&window.gsToast)window.gsToast(`${THEMES[name].label} theme applied`);
@@ -42,6 +42,10 @@
         <button type="button" class="gs-theme-card" data-theme="light">
           <div class="gs-theme-preview light"><span></span><i></i><i></i><i></i></div>
           <div class="gs-theme-copy"><b>Light Modern</b><span>White · Soft gray · Blue</span><small>Clean daytime / office view</small></div><strong>✓</strong>
+        </button>
+        <button type="button" class="gs-theme-card" data-theme="blackblue">
+          <div class="gs-theme-preview blackblue"><span></span><i></i><i></i><i></i></div>
+          <div class="gs-theme-copy"><b>Black & Blue</b><span>Black · Navy · Electric blue</span><small>Bold high-contrast operations theme</small></div><strong>✓</strong>
         </button>
       </div>
       <article class="card gs-theme-note"><h3>Theme behavior</h3><p class="muted">Only appearance changes. MQTT, Relay/Fan control, OTA, USB Flash, Serial Monitor and backend logic stay exactly the same.</p></article>`;

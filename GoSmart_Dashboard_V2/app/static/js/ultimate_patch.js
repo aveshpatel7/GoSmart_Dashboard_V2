@@ -11,17 +11,9 @@
     const title=document.getElementById('pageTitle'), sub=document.getElementById('pageSub');
     if(title) title.textContent='Ultimate Operations';
     if(sub) sub.textContent='Fleet, FastAPI and service command center';
-    const api=document.getElementById('uApiBase'); if(api&&!api.value) api.value=localStorage.getItem('gosmart_api_base')||PROD_API;
+    const api=document.getElementById('uApiBase');
+    if(api&&!api.value) api.value=localStorage.getItem('gosmart_api_base')||PROD_API;
     window.scrollTo(0,0);
-  }
-
-  function loadFanV2(){
-    if(document.getElementById('goSmartFanV2Script')||window.goSmartFanV2)return;
-    const s=document.createElement('script');
-    s.id='goSmartFanV2Script';
-    s.src='/static/js/fan_control_v2.js?v=20260827f2';
-    s.defer=true;
-    document.body.appendChild(s);
   }
 
   function wire(){
@@ -33,8 +25,10 @@
     const api=document.getElementById('uApiBase');
     if(api&&!api.value) api.value=localStorage.getItem('gosmart_api_base')||PROD_API;
     const bridge=document.getElementById('uApiMsg');
-    if(bridge&&!bridge.dataset.uPatch){bridge.dataset.uPatch='1';bridge.textContent='4Layers production API is prefilled. Enter admin credentials once to unlock backend fleet/users/OTA analytics.';}
-    loadFanV2();
+    if(bridge&&!bridge.dataset.uPatch){
+      bridge.dataset.uPatch='1';
+      bridge.textContent='4Layers production API is prefilled. Enter admin credentials once to unlock backend fleet/users/OTA analytics.';
+    }
   }
 
   const obs=new MutationObserver(wire);

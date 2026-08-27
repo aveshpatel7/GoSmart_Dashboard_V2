@@ -1,20 +1,33 @@
-/* Go Smart Organized Shell v1 — desktop navigation + Device Doctor polish. */
-body:not(.is-android) .sidebar{width:224px;padding:18px 12px}
-body:not(.is-android) .main{margin-left:224px;width:calc(100% - 224px)}
-body:not(.is-android) .brand{margin:2px 6px 20px}
-body:not(.is-android) .sidebar nav{display:block;overflow:auto;padding-right:2px}
-body:not(.is-android) .nav-section{border-bottom:1px solid rgba(120,160,170,.10);padding:4px 0 8px;margin-bottom:5px}
-body:not(.is-android) .nav-section-head{width:100%;min-height:34px;border:0;background:transparent;color:#6f8992;display:flex;align-items:center;justify-content:space-between;padding:5px 9px;font-size:10px;font-weight:800;letter-spacing:1.35px;text-align:left}
-body:not(.is-android) .nav-section-head span{display:flex;align-items:center;gap:8px}
-body:not(.is-android) .nav-section-head i{font-style:normal;color:var(--accent,#62e8c4);font-size:12px}
-body:not(.is-android) .nav-section-head b{font-size:13px;transition:transform .16s ease;color:#60777f}
+/* Go Smart Organized Shell v2 — larger desktop navigation + Device Doctor polish. */
+body:not(.is-android) .sidebar{width:258px;padding:20px 14px}
+body:not(.is-android) .main{margin-left:258px;width:calc(100% - 258px)}
+body:not(.is-android) .brand{margin:4px 8px 24px;gap:12px}
+body:not(.is-android) .brand .brand-mark{width:44px;height:44px;border-radius:13px;font-size:15px}
+body:not(.is-android) .brand b{font-size:15px;letter-spacing:.2px}
+body:not(.is-android) .brand small{font-size:9px;letter-spacing:1.5px;margin-top:4px}
+body:not(.is-android) .sidebar nav{display:block;overflow:auto;padding-right:3px;scrollbar-width:thin}
+body:not(.is-android) .nav-section{border-bottom:1px solid rgba(120,160,170,.12);padding:5px 0 10px;margin-bottom:6px}
+body:not(.is-android) .nav-section-head{width:100%;min-height:38px;border:0;background:transparent;color:#75929c;display:flex;align-items:center;justify-content:space-between;padding:6px 10px;font-size:11.5px;font-weight:850;letter-spacing:1.45px;text-align:left}
+body:not(.is-android) .nav-section-head span{display:flex;align-items:center;gap:9px}
+body:not(.is-android) .nav-section-head i{font-style:normal;color:var(--accent,#62e8c4);font-size:14px;min-width:16px;text-align:center}
+body:not(.is-android) .nav-section-head b{font-size:14px;transition:transform .16s ease;color:#708991}
 body:not(.is-android) .nav-section.collapsed .nav-section-head b{transform:rotate(-90deg)}
-body:not(.is-android) .nav-section-body{display:grid;gap:3px;overflow:hidden}
+body:not(.is-android) .nav-section-body{display:grid;gap:4px;overflow:hidden}
 body:not(.is-android) .nav-section.collapsed .nav-section-body{display:none}
-body:not(.is-android) .nav-section .nav{width:100%;padding:9px 10px;border-radius:10px;font-size:12px;gap:9px;margin:0;min-height:38px}
-body:not(.is-android) .nav-section.has-active>.nav-section-head{color:#bcd0d5}
-body:not(.is-android) .nav-section .nav.active{background:linear-gradient(90deg,rgba(98,232,196,.11),rgba(98,232,196,.035));box-shadow:inset 2px 0 0 var(--accent,#62e8c4)}
-body:not(.is-android) .sidebar-bottom{padding:8px 6px 0}
+body:not(.is-android) .nav-section .nav{width:100%;padding:11px 12px;border-radius:11px;font-size:14px;font-weight:560;gap:11px;margin:0;min-height:44px;line-height:1.15}
+body:not(.is-android) .nav-section .nav>span{font-size:14px;letter-spacing:.05px}
+body:not(.is-android) .nav-section.has-active>.nav-section-head{color:#d2e3e7}
+body:not(.is-android) .nav-section .nav.active{background:linear-gradient(90deg,rgba(98,232,196,.15),rgba(98,232,196,.045));box-shadow:inset 3px 0 0 var(--accent,#62e8c4);color:#eefafa}
+body:not(.is-android) .nav-section .nav:hover{background:rgba(98,232,196,.07);color:#e8f4f6}
+body:not(.is-android) .sidebar-bottom{padding:10px 6px 0;font-size:12px}
+body:not(.is-android) .sidebar-fleet-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:0 0 10px;padding:9px;border:1px solid rgba(120,160,170,.15);border-radius:12px;background:rgba(7,24,30,.56)}
+body:not(.is-android) .sidebar-fleet-mini>div{min-width:0;text-align:center;padding:5px 2px;border-radius:9px;background:rgba(255,255,255,.025)}
+body:not(.is-android) .sidebar-fleet-mini b{display:block;font-size:15px;color:#e9f6f7}
+body:not(.is-android) .sidebar-fleet-mini span{display:block;margin-top:2px;font-size:8.5px;text-transform:uppercase;letter-spacing:.8px;color:#78929a}
+body:not(.is-android) .sidebar-fleet-mini .ok b{color:#62e8c4}
+body:not(.is-android) .sidebar-fleet-mini .warn b{color:#ffd166}
+body:not(.is-android) .nav-badge{margin-left:auto;min-width:22px;height:20px;padding:0 6px;border-radius:999px;display:inline-grid;place-items:center;background:rgba(98,232,196,.13);border:1px solid rgba(98,232,196,.2);color:#8ff4db;font-size:10px;font-weight:800}
+body:not(.is-android) .nav-badge.alert{background:rgba(255,209,102,.12);border-color:rgba(255,209,102,.22);color:#ffd166}
 
 body:not(.is-android) #page-diagnostics>.card{padding:18px;border-radius:18px}
 body:not(.is-android) #page-diagnostics .toolbar{display:grid;grid-template-columns:minmax(260px,1fr) auto;max-width:680px;gap:10px;align-items:center;margin-bottom:10px}
@@ -39,9 +52,10 @@ body:not(.is-android) .top-actions{gap:8px}
 body:not(.is-android) .pro-theme-switch{padding:3px 5px;border:1px solid rgba(120,160,170,.14);border-radius:12px;background:rgba(9,23,29,.55)}
 body:not(.is-android) .pro-theme-switch button{width:24px;height:24px;border-radius:7px!important}
 
-@media(max-width:1050px) and (min-width:901px){
- body:not(.is-android) .sidebar{width:205px}
- body:not(.is-android) .main{margin-left:205px;width:calc(100% - 205px);padding-left:20px;padding-right:20px}
+@media(max-width:1150px) and (min-width:901px){
+ body:not(.is-android) .sidebar{width:232px;padding-left:11px;padding-right:11px}
+ body:not(.is-android) .main{margin-left:232px;width:calc(100% - 232px);padding-left:20px;padding-right:20px}
+ body:not(.is-android) .nav-section .nav,body:not(.is-android) .nav-section .nav>span{font-size:13px}
 }
 @media(max-width:900px){
  .diag-run-status{max-width:none}

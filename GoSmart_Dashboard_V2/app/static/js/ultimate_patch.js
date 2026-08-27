@@ -24,10 +24,13 @@
 
   function loadOrganizedShell(){
     if(!document.getElementById('goSmartOrganizedCss')){
-      const l=document.createElement('link');l.id='goSmartOrganizedCss';l.rel='stylesheet';l.href='/static/css/organized_shell.css?v=20260827o2';document.head.appendChild(l);
+      const l=document.createElement('link');l.id='goSmartOrganizedCss';l.rel='stylesheet';l.href='/static/css/organized_shell.css?v=20260827o3';document.head.appendChild(l);
     }
     if(!document.getElementById('goSmartOrganizedJs')){
       const s=document.createElement('script');s.id='goSmartOrganizedJs';s.src='/static/js/organized_shell.js?v=20260827o2';s.defer=true;document.body.appendChild(s);
+    }
+    if(!document.getElementById('goSmartSidebarEnhanceJs')){
+      const s=document.createElement('script');s.id='goSmartSidebarEnhanceJs';s.src='/static/js/sidebar_enhance.js?v=20260827s1';s.defer=true;document.body.appendChild(s);
     }
   }
 

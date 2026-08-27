@@ -42,7 +42,7 @@
 
   function loadDeviceOwnerOta(){
     if(!document.getElementById('goSmartDeviceOwnerOtaJs')){
-      const s=document.createElement('script');s.id='goSmartDeviceOwnerOtaJs';s.src='/static/js/device_owner_ota.js?v=20260827do2';s.defer=true;document.body.appendChild(s);
+      const s=document.createElement('script');s.id='goSmartDeviceOwnerOtaJs';s.src='/static/js/device_owner_ota.js?v=20260827do3';s.defer=true;document.body.appendChild(s);
     }
   }
 

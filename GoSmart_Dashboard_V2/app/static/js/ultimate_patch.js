@@ -15,6 +15,15 @@
     window.scrollTo(0,0);
   }
 
+  function loadFanV2(){
+    if(document.getElementById('goSmartFanV2Script')||window.goSmartFanV2)return;
+    const s=document.createElement('script');
+    s.id='goSmartFanV2Script';
+    s.src='/static/js/fan_control_v2.js?v=20260827f2';
+    s.defer=true;
+    document.body.appendChild(s);
+  }
+
   function wire(){
     const nav=document.querySelector('.nav[data-page="ultimate"]');
     if(nav&&!nav.dataset.uPatch){
@@ -25,6 +34,7 @@
     if(api&&!api.value) api.value=localStorage.getItem('gosmart_api_base')||PROD_API;
     const bridge=document.getElementById('uApiMsg');
     if(bridge&&!bridge.dataset.uPatch){bridge.dataset.uPatch='1';bridge.textContent='4Layers production API is prefilled. Enter admin credentials once to unlock backend fleet/users/OTA analytics.';}
+    loadFanV2();
   }
 
   const obs=new MutationObserver(wire);

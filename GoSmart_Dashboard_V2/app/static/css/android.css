@@ -1,39 +1,40 @@
-/* Go Smart Android UI v3 - compact native style */
+/* Go Smart Android UI v4 - native app polish */
 body.is-android{
- --bg:#071116;--card:#0d1b20;--line:#17343c;--accent:#64f0c8;--text:#eaf8f4;--muted:#8aa39d;
- background:var(--bg);touch-action:manipulation;-webkit-tap-highlight-color:transparent;padding-bottom:90px;
+ --bg:#060f14;--card:#0d1c22;--line:#173842;--accent:#63e6c5;--text:#ecf8f5;--muted:#8ca8a2;
+ background:var(--bg);touch-action:manipulation;-webkit-tap-highlight-color:transparent;padding-bottom:96px;
+ font-size:15px;
 }
-body.is-android .main{margin:0!important;width:100%!important;padding:0 10px 100px!important}
+body.is-android .main{margin:0!important;width:100%!important;padding:0 10px 110px!important;overflow-x:hidden}
 body.is-android .sidebar{display:none!important}
-body.is-android .topbar{height:62px;position:sticky;top:0;z-index:50;background:#071116;border-bottom:1px solid var(--line)}
-body.is-android .topbar h2{font-size:18px;margin:0}
-body.is-android .topbar p{display:none}
-body.is-android .page{padding-top:12px}
-body.is-android .hero{padding:18px;border-radius:16px;display:block;background:linear-gradient(145deg,#10252b,#09161b);overflow:hidden}
-body.is-android .hero h1{font-size:26px;line-height:1.1}
-body.is-android .hero p{font-size:13px;line-height:1.5}
-body.is-android .stats{grid-template-columns:1fr 1fr!important;gap:8px;margin:12px 0}
-body.is-android .stat{padding:14px;border-radius:14px}
-body.is-android .stat b{font-size:24px}
-body.is-android .card{padding:14px;border-radius:15px;background:var(--card);border-color:var(--line)}
-body.is-android .grid.two,body.is-android .control-grid{grid-template-columns:1fr!important;gap:10px}
-body.is-android .relay-grid{grid-template-columns:1fr!important;gap:8px}
-body.is-android .relay{height:76px;padding:14px;border-radius:14px}
-body.is-android .switch{width:58px;height:32px}
-body.is-android .switch:after{width:24px;height:24px}
+body.is-android .topbar{height:60px;position:sticky;top:0;z-index:50;background:rgba(6,15,20,.96);border-bottom:1px solid var(--line)}
+body.is-android .topbar h2{font-size:19px;font-weight:800}
+body.is-android .page{padding-top:10px}
+body.is-android .card,body.is-android .stat{background:var(--card);border:1px solid var(--line);box-shadow:0 8px 20px rgba(0,0,0,.18)}
+body.is-android .card{padding:14px;border-radius:18px}
+body.is-android button{min-height:46px;border-radius:14px;font-weight:700;transition:transform .15s ease,filter .15s ease,box-shadow .15s ease}
+body.is-android button:active{transform:scale(.96);filter:brightness(1.15)}
+body.is-android .relay-grid{display:grid;grid-template-columns:1fr 1fr!important;gap:10px}
+body.is-android .relay{height:86px;padding:12px;border-radius:18px;display:flex;align-items:center;justify-content:space-between}
+body.is-android .relay.active{background:linear-gradient(135deg,#10332d,#0d211f);border-color:#38b99a}
+body.is-android .switch{width:60px;height:34px;border-radius:20px;transition:.25s}
+body.is-android .switch:after{width:26px;height:26px;top:4px;transition:.25s}
 body.is-android .switch.on:after{left:30px}
-body.is-android .master{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-body.is-android .master button{height:48px;font-size:14px}
-body.is-android .fan-orb{font-size:42px}
-body.is-android .speed-row{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
-body.is-android .speed-row button{min-height:44px;font-size:13px}
-body.is-android .android-bottom-nav{display:grid!important;position:fixed;bottom:8px;left:8px;right:8px;z-index:100;grid-template-columns:repeat(5,1fr);background:#08171d;border:1px solid var(--line);border-radius:18px;padding:6px}
-body.is-android .android-bottom-nav button{min-height:50px;color:var(--muted);background:none;border:0}
+body.is-android .master{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+body.is-android .master button{height:52px;font-size:15px}
+/* New fan app style */
+body.is-android .fan-card{border-radius:20px;text-align:center}
+body.is-android .fan-orb{width:90px;height:90px;margin:12px auto;border-radius:50%;display:grid;place-items:center;font-size:0;background:radial-gradient(circle,#233f46,#10252b);box-shadow:0 0 30px rgba(99,230,197,.18)}
+body.is-android .fan-orb:before{content:'🌀';font-size:52px;display:block;animation:fanIdle 3s linear infinite}
+body.is-android .fan-orb.spinning:before{animation:fanSpin .7s linear infinite}
+@keyframes fanSpin{to{transform:rotate(360deg)}}
+@keyframes fanIdle{50%{opacity:.8}}
+body.is-android .speed-row{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+body.is-android .speed-row button{min-height:48px;padding:5px;font-size:13px}
+body.is-android .android-bottom-nav{display:grid!important;position:fixed;bottom:8px;left:8px;right:8px;z-index:100;grid-template-columns:repeat(5,1fr);background:#08171d;border:1px solid var(--line);border-radius:22px;padding:7px;backdrop-filter:blur(12px)}
+body.is-android .android-bottom-nav button{min-height:52px;color:var(--muted);background:none;border:0}
 body.is-android .android-bottom-nav button.active{background:#12342f;color:var(--accent)}
-body.is-android button{min-height:44px;border-radius:12px}
-body.is-android.reduce-motion *{animation-duration:.01ms!important;transition-duration:.08ms!important}
-/* Theme variants */
+/* Themes */
 body.theme-apple{--accent:#8ab4ff;--card:#101820}
-body.theme-industrial{--accent:#ffb454;--card:#15191b}
+body.theme-industrial{--accent:#ffb454;--card:#171b1d}
 body.theme-neon{--accent:#64f0c8;--card:#0d1b20}
-@media(max-width:390px){body.is-android .stats{grid-template-columns:1fr!important}body.is-android .main{padding-left:7px!important;padding-right:7px!important}}
+@media(max-width:390px){body.is-android .relay-grid{grid-template-columns:1fr!important}body.is-android .main{padding-left:7px!important;padding-right:7px!important}}

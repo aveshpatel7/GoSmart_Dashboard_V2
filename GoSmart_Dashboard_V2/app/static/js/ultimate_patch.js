@@ -35,8 +35,15 @@
   }
 
   function loadUltimateSizing(){
-    const old=document.getElementById('goSmartUltimateSizingCss');if(old)return;
-    const l=document.createElement('link');l.id='goSmartUltimateSizingCss';l.rel='stylesheet';l.href='/static/css/ultimate.css?v=20260827u2';document.head.appendChild(l);
+    if(!document.getElementById('goSmartUltimateSizingCss')){
+      const l=document.createElement('link');l.id='goSmartUltimateSizingCss';l.rel='stylesheet';l.href='/static/css/ultimate.css?v=20260827u3';document.head.appendChild(l);
+    }
+  }
+
+  function loadDeviceOwnerOta(){
+    if(!document.getElementById('goSmartDeviceOwnerOtaJs')){
+      const s=document.createElement('script');s.id='goSmartDeviceOwnerOtaJs';s.src='/static/js/device_owner_ota.js?v=20260827do1';s.defer=true;document.body.appendChild(s);
+    }
   }
 
   function loadDashboard2026(){
@@ -53,11 +60,11 @@
     document.getElementById('page-ultimate')?.classList.add('active');
     document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));
     document.querySelector('.nav[data-page="ultimate"]')?.classList.add('active');
-    const title=document.getElementById('pageTitle'), sub=document.getElementById('pageSub');
-    if(title) title.textContent='Ultimate Operations';
-    if(sub) sub.textContent='Fleet, FastAPI and service command center';
+    const title=document.getElementById('pageTitle'),sub=document.getElementById('pageSub');
+    if(title)title.textContent='Ultimate Operations';
+    if(sub)sub.textContent='Fleet, FastAPI and service command center';
     const api=document.getElementById('uApiBase');
-    if(api&&!api.value) api.value=localStorage.getItem('gosmart_api_base')||PROD_API;
+    if(api&&!api.value)api.value=localStorage.getItem('gosmart_api_base')||PROD_API;
     window.scrollTo(0,0);
   }
 
@@ -65,10 +72,10 @@
     const nav=document.querySelector('.nav[data-page="ultimate"]');
     if(nav&&!nav.dataset.uPatch){
       nav.dataset.uPatch='1';
-      nav.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();activateUltimate();},{capture:true});
+      nav.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();activateUltimate()},{capture:true});
     }
     const api=document.getElementById('uApiBase');
-    if(api&&!api.value) api.value=localStorage.getItem('gosmart_api_base')||PROD_API;
+    if(api&&!api.value)api.value=localStorage.getItem('gosmart_api_base')||PROD_API;
     const bridge=document.getElementById('uApiMsg');
     if(bridge&&!bridge.dataset.uPatch){
       bridge.dataset.uPatch='1';
@@ -76,7 +83,7 @@
     }
   }
 
-  loadProLayer();loadThemeSettings();loadUltimateSizing();loadDashboard2026();setTimeout(loadOrganizedShell,60);
-  document.addEventListener('DOMContentLoaded',()=>{wire();loadProLayer();loadThemeSettings();loadUltimateSizing();loadDashboard2026();setTimeout(loadOrganizedShell,60)});
+  loadProLayer();loadThemeSettings();loadUltimateSizing();loadDashboard2026();loadDeviceOwnerOta();setTimeout(loadOrganizedShell,60);
+  document.addEventListener('DOMContentLoaded',()=>{wire();loadProLayer();loadThemeSettings();loadUltimateSizing();loadDashboard2026();loadDeviceOwnerOta();setTimeout(loadOrganizedShell,60)});
   setTimeout(wire,0);
 })();

@@ -6,9 +6,9 @@
     {id:'core',label:'COMMAND',icon:'◈',pages:['overview','control','devices','inspector']},
     {id:'service',label:'SERVICE',icon:'⌁',pages:['diagnostics','ota','rf']},
     {id:'insights',label:'INSIGHTS',icon:'◒',pages:['analytics','alerts','logs']},
-    {id:'admin',label:'ADMIN',icon:'⚙',pages:['ultimate','settings']}
+    {id:'admin',label:'ADMIN',icon:'⚙',pages:['ultimate','settings','appearance']}
   ];
-  const labels={overview:'Overview',control:'Live Control',devices:'Devices',inspector:'Device Inspector',diagnostics:'Device Doctor',ota:'OTA / USB',rf:'RF Manager',analytics:'Analytics',alerts:'Alerts',logs:'Logs',ultimate:'Ultimate Ops',settings:'Device Meta'};
+  const labels={overview:'Overview',control:'Live Control',devices:'Devices',inspector:'Device Inspector',diagnostics:'Device Doctor',ota:'OTA / USB',rf:'RF Manager',analytics:'Analytics',alerts:'Alerts',logs:'Logs',ultimate:'Ultimate Ops',settings:'Device Meta',appearance:'Settings'};
   let diagBusy=false;
 
   function organizeSidebar(){
@@ -46,9 +46,9 @@
 
   function removeDuplicateChrome(){
     if(document.body.classList.contains('is-android'))return;
-    /* Keep the three-color Pro selector; hide redundant premium theme moon button. */
     const theme=$('themeBtn');if(theme)theme.style.display='none';
     const menu=$('premiumThemeMenu');if(menu)menu.remove();
+    const pro=$('proTheme');if(pro)pro.remove();
   }
 
   function diagButton(){
@@ -82,7 +82,6 @@
   function wireDiagnostics(){
     const btn=diagButton();if(!btn||btn.dataset.diagWired==='1')return;
     btn.dataset.diagWired='1';btn.type='button';btn.textContent='Run Device Doctor';
-    /* Capture phase makes this reliable even if older inline handlers are stale. */
     btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();runDiagnostics()},{capture:true});
     diagStatus();
   }
@@ -90,15 +89,13 @@
   function polishPageTitles(){
     const title=$('pageTitle');if(!title)return;
     const active=document.querySelector('.page.active')?.id?.replace('page-','');
-    const map={diagnostics:['Device Doctor','One-click ESP32 health checks'],inspector:['Device Inspector','Live board state and telemetry'],ota:['Service Tools','OTA, USB flash and serial'],ultimate:['Operations','Fleet, users and backend']};
+    const map={diagnostics:['Device Doctor','One-click ESP32 health checks'],inspector:['Device Inspector','Live board state and telemetry'],ota:['Service Tools','OTA, USB flash and serial'],ultimate:['Operations','Fleet, users and backend'],appearance:['Settings','Appearance and dashboard preferences']};
     if(map[active]){title.textContent=map[active][0];const sub=$('pageSub');if(sub)sub.textContent=map[active][1]}
   }
 
   function boot(){organizeSidebar();removeDuplicateChrome();wireDiagnostics();syncNavGroups();polishPageTitles()}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
-  /* A few delayed passes catch dynamically injected Inspector/Ultimate items, then stop. */
   [250,900,2200].forEach(ms=>setTimeout(()=>{if(document.querySelector('.sidebar nav')?.dataset.organized==='1'){
-      /* If late dynamic nav items appeared, rebuild once while preserving existing buttons. */
       const nav=document.querySelector('.sidebar nav');const late=[...nav.querySelectorAll(':scope > .nav[data-page]')];if(late.length){nav.dataset.organized='0';organizeSidebar()}
     }else organizeSidebar();removeDuplicateChrome();wireDiagnostics();syncNavGroups();polishPageTitles()},ms));
   document.addEventListener('click',e=>{if(e.target.closest('.nav[data-page]'))setTimeout(()=>{syncNavGroups();polishPageTitles();wireDiagnostics()},0)},true);

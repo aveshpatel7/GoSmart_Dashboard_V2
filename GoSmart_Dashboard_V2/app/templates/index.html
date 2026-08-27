@@ -10,104 +10,17 @@
 </head>
 <body>
 {% if not logged_in %}
-<section class="login-shell">
-  <div class="login-card">
-    <div class="brand-mark">GS</div>
-    <h1>Go Smart</h1>
-    <p>Fleet Command Center</p>
-    {% if error %}<div class="alert danger">{{ error }}</div>{% endif %}
-    <form method="post">
-      <input name="username" placeholder="Username" autocomplete="username" required>
-      <input name="password" type="password" placeholder="Password" autocomplete="current-password" required>
-      <button class="primary wide">Sign in</button>
-    </form>
-  </div>
-</section>
+<section class="login-shell"><div class="login-card"><div class="brand-mark">GS</div><h1>Go Smart</h1><p>Fleet Command Center</p>{% if error %}<div class="alert danger">{{ error }}</div>{% endif %}<form method="post"><input name="username" placeholder="Username" autocomplete="username" required><input name="password" type="password" placeholder="Password" autocomplete="current-password" required><button class="primary wide">Sign in</button></form></div></section>
 {% else %}
 <div class="app-shell">
-  <aside class="sidebar" id="sidebar">
-    <div class="brand"><div class="brand-mark">GS</div><div><b>GO SMART</b><small>COMMAND CENTER</small></div></div>
-    <nav>
-      <button class="nav active" data-page="overview">⌂ <span>Overview</span></button>
-      <button class="nav" data-page="devices">▦ <span>Devices</span></button>
-      <button class="nav" data-page="control">◉ <span>Live Control</span></button>
-      <button class="nav" data-page="rf">⌁ <span>RF Management</span></button>
-      <button class="nav" data-page="ota">⇧ <span>OTA Center</span></button>
-      <button class="nav" data-page="diagnostics">♡ <span>Diagnostics</span></button>
-      <button class="nav" data-page="analytics">◒ <span>Analytics</span></button>
-      <button class="nav" data-page="alerts">! <span>Alerts</span></button>
-      <button class="nav" data-page="logs">≡ <span>Logs</span></button>
-      <button class="nav" data-page="settings">⚙ <span>Device Meta</span></button>
-    </nav>
-    <div class="sidebar-bottom">
-      <span><span class="status-dot" id="mqttDot"></span> MQTT <span id="mqttText">connecting</span></span>
-      <form action="/logout" method="post"><button class="ghost wide">Log out</button></form>
-    </div>
-  </aside>
-
+  <aside class="sidebar" id="sidebar"><div class="brand"><div class="brand-mark">GS</div><div><b>GO SMART</b><small>COMMAND CENTER</small></div></div><nav><button class="nav active" data-page="overview">⌂ <span>Overview</span></button><button class="nav" data-page="devices">▦ <span>Devices</span></button><button class="nav" data-page="control">◉ <span>Live Control</span></button><button class="nav" data-page="rf">⌁ <span>RF Management</span></button><button class="nav" data-page="ota">⇧ <span>OTA Center</span></button><button class="nav" data-page="diagnostics">♡ <span>Diagnostics</span></button><button class="nav" data-page="analytics">◒ <span>Analytics</span></button><button class="nav" data-page="alerts">! <span>Alerts</span></button><button class="nav" data-page="logs">≡ <span>Logs</span></button><button class="nav" data-page="settings">⚙ <span>Device Meta</span></button></nav><div class="sidebar-bottom"><span><span class="status-dot" id="mqttDot"></span> MQTT <span id="mqttText">connecting</span></span><form action="/logout" method="post"><button class="ghost wide">Log out</button></form></div></aside>
   <main class="main">
-    <header class="topbar">
-      <button class="menu" id="menuBtn">☰</button>
-      <div><h2 id="pageTitle">Overview</h2><p id="pageSub">Fleet health and live activity</p></div>
-      <div class="top-actions"><span id="lastSync">Syncing…</span><button class="primary" onclick="refresh()">↻ Refresh</button></div>
-    </header>
-
-    <section class="page active" id="page-overview">
-      <div class="hero"><div><span class="eyebrow">GO SMART FLEET</span><h1>Command Center</h1><p>Monitor, control and maintain your connected ESP32 fleet without changing the device firmware.</p></div><a class="secondary" href="/api/export.csv">Export CSV</a></div>
-      <div class="stats">
-        <div class="stat"><span>Total Devices</span><b id="statTotal">0</b></div>
-        <div class="stat good"><span>Online</span><b id="statOnline">0</b></div>
-        <div class="stat bad"><span>Offline</span><b id="statOffline">0</b></div>
-        <div class="stat warn"><span>Alerts</span><b id="statAlerts">0</b></div>
-      </div>
-      <div class="grid two">
-        <article class="card"><div class="card-head"><h3>Fleet health</h3><span class="muted">Live</span></div><div id="healthList"></div></article>
-        <article class="card"><div class="card-head"><h3>Recent activity</h3><button class="link" onclick="showPage('logs')">View all</button></div><div id="recentActivity" class="log-list"></div></article>
-      </div>
-    </section>
-
-    <section class="page" id="page-devices">
-      <div class="toolbar"><input id="deviceSearch" placeholder="Search device ID, room or customer…" oninput="renderDevices()"><select id="deviceFilter" onchange="renderDevices()"><option value="all">All</option><option value="online">Online</option><option value="offline">Offline</option><option value="warning">Warnings</option></select></div>
-      <div class="card table-wrap"><table><thead><tr><th>Device</th><th>Status</th><th>Firmware</th><th>RSSI</th><th>Uptime</th><th>Boots</th><th>Crashes</th><th>Actions</th></tr></thead><tbody id="deviceTable"></tbody></table></div>
-    </section>
-
-    <section class="page" id="page-control">
-      <div class="toolbar"><select id="controlNode"></select><button class="secondary" onclick="localStatePrompt()">Check Local /state</button></div>
-      <div id="controlFeedback" class="control-feedback" aria-live="polite"></div>
-      <div class="control-grid">
-        <article class="card"><div class="card-head"><h3>Relay channels</h3><span class="muted">Instant UI response</span></div><div class="relay-grid" id="relayGrid"></div><div class="master"><button id="allOnBtn" class="primary" onclick="masterCommand(true)">ALL ON</button><button id="allOffBtn" class="danger-btn" onclick="masterCommand(false)">ALL OFF</button></div></article>
-        <article class="card fan-card"><h3>Fan</h3><div class="fan-orb" id="fanOrb">🌀</div><div id="fanState" class="big-state">OFF</div><div class="speed-row" id="speedRow"></div></article>
-      </div>
-    </section>
-
-    <section class="page" id="page-rf">
-      <div class="card"><div class="card-head"><div><h3>RF Management</h3><p class="muted">The existing firmware stores RF slots locally. This page records dashboard-side notes and shows device activity; it does not invent pairing APIs that the firmware does not expose.</p></div></div><div class="rf-grid"><div class="rf-slot">RF 1 <b>Light 1</b></div><div class="rf-slot">RF 2 <b>Light 2</b></div><div class="rf-slot">RF 3 <b>Light 3</b></div><div class="rf-slot">RF 4 <b>Light 4</b></div><div class="rf-slot">RF UP <b>Fan Up</b></div><div class="rf-slot">RF DOWN <b>Fan Down</b></div><div class="rf-slot">RF FAN <b>Fan Toggle</b></div><div class="rf-slot">RF MASTER <b>Master</b></div></div></div>
-    </section>
-
-    <section class="page" id="page-ota">
-      <div class="grid two">
-        <article class="card"><h3>Firmware library</h3><div id="firmwareList"></div><form id="uploadForm"><input type="file" name="file" accept=".bin" required><button class="primary" id="uploadBtn">Upload firmware</button></form><div id="uploadStatus" class="progress-box">Ready.</div></article>
-        <article class="card"><h3>OTA campaign</h3><select id="otaNode"></select><select id="otaFile"></select><button id="otaBtn" class="primary wide" onclick="sendOta()">Send OTA</button><div id="otaStatus" class="progress-box">No active OTA campaign.</div></article>
-      </div>
-      <div class="grid two ota-tools">
-        <article class="card usb-flash-card">
-          <div class="card-head"><div><h3>USB Flash</h3><p class="muted">Flash an ESP32 directly from Chrome/Edge using Web Serial + Espressif esptool-js. Android Chrome uses a WebUSB compatibility layer.</p></div><span class="usb-badge">USB</span></div>
-          <div class="usb-grid">
-            <input id="usbFirmwareFile" type="file" accept=".bin">
-            <select id="usbAddress"><option value="0x10000">App firmware · 0x10000</option><option value="0x0">Merged image · 0x0000</option></select>
-            <select id="usbFlashSize"><option value="4MB">4 MB</option><option value="8MB">8 MB</option><option value="16MB">16 MB</option></select>
-            <select id="usbBaud"><option value="460800">460800 baud</option><option value="115200">115200 baud</option><option value="921600">921600 baud</option></select>
-          </div>
-          <label class="check-row"><input id="usbErase" type="checkbox"> Erase entire flash before writing</label>
-          <div class="usb-actions"><button id="usbConnectBtn" class="secondary" type="button" onclick="usbConnect()">Connect ESP32</button><button id="usbFlashBtn" class="primary" type="button" onclick="usbFlash()" disabled>Flash USB</button></div>
-          <div id="usbChip" class="usb-chip">Not connected</div>
-          <div class="progress-track"><i id="usbProgressBar"></i></div>
-          <div id="usbStatus" class="progress-box">Checking browser USB support…</div>
-        </article>
-        <article class="card"><h3>OTA notes</h3><div class="alert">OTA updates use the existing MQTT control path and discovered Node IDs. USB Flash is independent and requires a local browser with USB access.</div><p class="muted">For normal fleet deployment use OTA. Use USB Flash when the board is physically connected to this computer or Android phone through USB OTG.</p></article>
-      </div>
-    </section>
-
+    <header class="topbar"><button class="menu" id="menuBtn">☰</button><div><h2 id="pageTitle">Overview</h2><p id="pageSub">Fleet health and live activity</p></div><div class="top-actions"><span id="lastSync">Syncing…</span><button class="primary" onclick="refresh()">↻ Refresh</button></div></header>
+    <section class="page active" id="page-overview"><div class="hero"><div><span class="eyebrow">GO SMART FLEET</span><h1>Command Center</h1><p>Monitor, control and maintain your connected ESP32 fleet without changing the device firmware.</p></div><a class="secondary" href="/api/export.csv">Export CSV</a></div><div class="stats"><div class="stat"><span>Total Devices</span><b id="statTotal">0</b></div><div class="stat good"><span>Online</span><b id="statOnline">0</b></div><div class="stat bad"><span>Offline</span><b id="statOffline">0</b></div><div class="stat warn"><span>Alerts</span><b id="statAlerts">0</b></div></div><div class="grid two"><article class="card"><div class="card-head"><h3>Fleet health</h3><span class="muted">Live</span></div><div id="healthList"></div></article><article class="card"><div class="card-head"><h3>Recent activity</h3><button class="link" onclick="showPage('logs')">View all</button></div><div id="recentActivity" class="log-list"></div></article></div></section>
+    <section class="page" id="page-devices"><div class="toolbar"><input id="deviceSearch" placeholder="Search device ID, room or customer…" oninput="renderDevices()"><select id="deviceFilter" onchange="renderDevices()"><option value="all">All</option><option value="online">Online</option><option value="offline">Offline</option><option value="warning">Warnings</option></select></div><div class="card table-wrap"><table><thead><tr><th>Device</th><th>Status</th><th>Firmware</th><th>RSSI</th><th>Uptime</th><th>Boots</th><th>Crashes</th><th>Actions</th></tr></thead><tbody id="deviceTable"></tbody></table></div></section>
+    <section class="page" id="page-control"><div class="toolbar"><select id="controlNode"></select><button class="secondary" onclick="localStatePrompt()">Check Local /state</button></div><div id="controlFeedback" class="control-feedback" aria-live="polite"></div><div class="control-grid"><article class="card"><div class="card-head"><h3>Relay channels</h3><span class="muted">Instant UI response</span></div><div class="relay-grid" id="relayGrid"></div><div class="master"><button id="allOnBtn" class="primary" onclick="masterCommand(true)">ALL ON</button><button id="allOffBtn" class="danger-btn" onclick="masterCommand(false)">ALL OFF</button></div></article><article class="card fan-card"><h3>Fan</h3><div class="fan-orb" id="fanOrb">🌀</div><div id="fanState" class="big-state">OFF</div><div class="speed-row" id="speedRow"></div></article></div></section>
+    <section class="page" id="page-rf"><div class="card"><div class="card-head"><div><h3>RF Management</h3><p class="muted">The existing firmware stores RF slots locally. This page records dashboard-side notes and shows device activity; it does not invent pairing APIs that the firmware does not expose.</p></div></div><div class="rf-grid"><div class="rf-slot">RF 1 <b>Light 1</b></div><div class="rf-slot">RF 2 <b>Light 2</b></div><div class="rf-slot">RF 3 <b>Light 3</b></div><div class="rf-slot">RF 4 <b>Light 4</b></div><div class="rf-slot">RF UP <b>Fan Up</b></div><div class="rf-slot">RF DOWN <b>Fan Down</b></div><div class="rf-slot">RF FAN <b>Fan Toggle</b></div><div class="rf-slot">RF MASTER <b>Master</b></div></div></div></section>
+    <section class="page" id="page-ota"><div class="grid two"><article class="card"><h3>Firmware library</h3><div id="firmwareList"></div><form id="uploadForm"><input type="file" name="file" accept=".bin" required><button class="primary" id="uploadBtn">Upload firmware</button></form><div id="uploadStatus" class="progress-box">Ready.</div></article><article class="card"><h3>OTA campaign</h3><select id="otaNode"></select><select id="otaFile"></select><button id="otaBtn" class="primary wide" onclick="sendOta()">Send OTA</button><div id="otaStatus" class="progress-box">No active OTA campaign.</div></article></div><div class="grid two ota-tools"><article class="card usb-flash-card"><div class="card-head"><div><h3>USB Flash</h3><p class="muted">Flash an ESP32 directly from Chrome/Edge using Web Serial + Espressif esptool-js. Android Chrome uses a WebUSB compatibility layer.</p></div><span class="usb-badge">USB</span></div><div class="usb-grid"><input id="usbFirmwareFile" type="file" accept=".bin"><select id="usbAddress"><option value="0x10000">App firmware · 0x10000</option><option value="0x0">Merged image · 0x0000</option></select><select id="usbFlashSize"><option value="4MB">4 MB</option><option value="8MB">8 MB</option><option value="16MB">16 MB</option></select><select id="usbBaud"><option value="460800">460800 baud</option><option value="115200">115200 baud</option><option value="921600">921600 baud</option></select></div><label class="check-row"><input id="usbErase" type="checkbox"> Erase entire flash before writing</label><div class="usb-actions"><button id="usbConnectBtn" class="secondary" type="button" onclick="usbConnect()">Connect ESP32</button><button id="usbFlashBtn" class="primary" type="button" onclick="usbFlash()" disabled>Flash USB</button></div><div id="usbChip" class="usb-chip">Not connected</div><div class="progress-track"><i id="usbProgressBar"></i></div><div id="usbStatus" class="progress-box">Checking browser USB support…</div></article><article class="card"><h3>OTA notes</h3><div class="alert">OTA updates use the existing MQTT control path and discovered Node IDs. USB Flash is independent and requires a local browser with USB access.</div><p class="muted">For normal fleet deployment use OTA. Use USB Flash when the board is physically connected to this computer or Android phone through USB OTG.</p></article></div></section>
     <section class="page" id="page-diagnostics"><div class="card"><div class="toolbar"><select id="diagNode"></select><button class="primary" onclick="renderDiagnostics()">Run dashboard diagnostics</button></div><div id="diagnosticPanel"></div></div></section>
     <section class="page" id="page-analytics"><div class="stats"><div class="stat"><span>Total toggles</span><b id="totalToggles">0</b></div><div class="stat"><span>Total runtime</span><b id="totalHours">0h</b></div><div class="stat"><span>Avg RSSI</span><b id="avgRssi">—</b></div><div class="stat"><span>Total crashes</span><b id="totalCrashes">0</b></div></div><div class="grid two"><article class="card"><h3>Channel runtime</h3><div id="runtimeBars"></div></article><article class="card"><h3>Device health distribution</h3><div id="healthBars"></div></article></div></section>
     <section class="page" id="page-alerts"><div class="card"><div class="card-head"><h3>Alert center</h3><span class="muted">Derived from existing telemetry/status</span></div><div id="alertsList"></div></div></section>
@@ -115,13 +28,7 @@
     <section class="page" id="page-settings"><div class="card"><h3>Dashboard device metadata</h3><p class="muted">Room, customer, warranty and notes live in the dashboard backend; they do not alter ESP32 firmware.</p><select id="metaNode" onchange="loadMetaForm()"></select><div class="form-grid"><input id="metaRoom" placeholder="Room"><input id="metaCustomer" placeholder="Customer"><input id="metaWarranty" type="date"><textarea id="metaNotes" placeholder="Notes"></textarea></div><button class="primary" onclick="saveMeta()">Save metadata</button></div></section>
   </main>
 </div>
-<script src="{{ url_for('static', filename='js/app.js') }}?v=20260827e"></script>
-<script src="{{ url_for('static', filename='js/fixes.js') }}?v=20260827e"></script>
-<script src="{{ url_for('static', filename='js/usb_bundle_fix.js') }}?v=20260827e"></script>
-<script src="{{ url_for('static', filename='js/android.js') }}?v=20260827a5"></script>
-<script src="{{ url_for('static', filename='js/ultimate.js') }}?v=20260827u3"></script>
-<script src="{{ url_for('static', filename='js/ultimate_patch.js') }}?v=20260827u2"></script>
-<script src="{{ url_for('static', filename='js/fan_click_fix.js') }}?v=20260827f3"></script>
+<script src="{{ url_for('static', filename='js/app.js') }}?v=20260827e"></script><script src="{{ url_for('static', filename='js/fixes.js') }}?v=20260827e"></script><script src="{{ url_for('static', filename='js/usb_bundle_fix.js') }}?v=20260827e"></script><script src="{{ url_for('static', filename='js/android.js') }}?v=20260827a5"></script><script src="{{ url_for('static', filename='js/ultimate.js') }}?v=20260827u3"></script><script src="{{ url_for('static', filename='js/ultimate_patch.js') }}?v=20260827u2"></script><script src="{{ url_for('static', filename='js/fan_click_fix.js') }}?v=20260827f3"></script>
 {% endif %}
 </body>
 </html>

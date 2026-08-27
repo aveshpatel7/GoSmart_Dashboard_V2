@@ -3,6 +3,16 @@
   const PROD_API='https://edabtynvpy.ap-south-1.awsapprunner.com';
   if(!localStorage.getItem('gosmart_api_base')) localStorage.setItem('gosmart_api_base',PROD_API);
 
+  function loadProLayer(){
+    if(!document.getElementById('goSmartProCss')){
+      const l=document.createElement('link');l.id='goSmartProCss';l.rel='stylesheet';l.href='/static/css/pro.css?v=20260827p1';document.head.appendChild(l);
+    }
+    if(!document.getElementById('goSmartProJs')&&!window.goSmartProLoaded){
+      const s=document.createElement('script');s.id='goSmartProJs';s.src='/static/js/pro.js?v=20260827p1';s.defer=true;document.body.appendChild(s);
+      window.goSmartProLoaded=true;
+    }
+  }
+
   function activateUltimate(){
     document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
     document.getElementById('page-ultimate')?.classList.add('active');
@@ -31,8 +41,7 @@
     }
   }
 
-  const obs=new MutationObserver(wire);
-  obs.observe(document.documentElement,{childList:true,subtree:true});
-  document.addEventListener('DOMContentLoaded',wire);
+  loadProLayer();
+  document.addEventListener('DOMContentLoaded',()=>{wire();loadProLayer()});
   setTimeout(wire,0);
 })();

@@ -213,16 +213,23 @@ def on_message(client, userdata, msg):
         add_event("error", "", f"MQTT message parse error: {exc}")
 
 
-mqtt_client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
+mqtt_client = mqtt.Client(
+    mqtt.CallbackAPIVersion.VERSION2,
+    client_id=f"gosmart-dashboard-{secrets.token_hex(4)}",
+)
 mqtt_client.username_pw_set(MQTT_USER, MQTT_PASS)
 mqtt_client.tls_set()
 mqtt_client.on_connect = on_connect
 mqtt_client.on_disconnect = on_disconnect
 mqtt_client.on_message = on_message
+mqtt_client.reconnect_delay_set(min_delay=2, max_delay=30)
 
 try:
-    mqtt_client.connect(MQTT_BROKER, MQTT_PORT, 60)
+    # connect_async + loop_start keeps retrying after Render restarts, DNS delays,
+    # temporary broker/network failures, or a dropped MQTT connection.
+    mqtt_client.connect_async(MQTT_BROKER, MQTT_PORT, 60)
     mqtt_client.loop_start()
+    add_event("mqtt", "", "MQTT connection loop started")
 except Exception as exc:
     add_event("error", "", f"MQTT startup error: {exc}")
 
